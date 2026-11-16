@@ -1,0 +1,1397 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Skutesjön</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap">
+<style>
+:root{
+  --ground:#F5F0E8;
+  --surface:#ECE5D9;
+  --surface-2:#E3DACB;
+  --line:rgba(70,60,48,.12);
+  --line-strong:rgba(70,60,48,.26);
+  --ink:#3A3631;
+  --ink-soft:#6B635A;
+  --ink-faint:#998F85;
+  --moss:#8C9A85;
+  --moss-deep:#66735F;
+  --water:#9DB3B8;
+  --water-deep:#8AA0A4;
+  --oak:#B89E7E;
+  --ph-a:#E6DFD2; --ph-b:#DAD3C6; --ph-c:#D2CCC2; --ph-d:#F1ECE4;
+  --shadow:0 30px 60px -30px rgba(58,54,49,.22);
+  --radius:2px;
+  color-scheme:light;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:300;font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.display{font-family:"Cormorant Garamond","Iowan Old Style",Georgia,serif;font-weight:300;line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.005em}
+h2{font-size:clamp(2.2rem,4.5vw,3.6rem)}
+h3{font-size:clamp(1.5rem,2.4vw,2rem);font-weight:400}
+p{margin:0}
+a{color:inherit}
+img{max-width:100%}
+.wrap{width:min(1240px,100%);margin-inline:auto;padding-inline:clamp(16px,4vw,48px)}
+.eyebrow{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;font-weight:500;color:var(--moss);display:flex;align-items:center;gap:14px}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--moss);opacity:.7}
+.lede{font-size:1.15rem;line-height:1.75;color:var(--ink-soft);max-width:36rem}
+.measure{max-width:38rem}
+section{padding-block:clamp(72px,10vw,140px)}
+.hair{border:0;border-top:1px solid var(--line);margin:0}
+
+/* Nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--ground) 84%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:68px}
+.brand{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.5rem;letter-spacing:.06em;text-decoration:none;font-weight:400;display:flex;align-items:center;gap:12px}
+.brand svg{width:22px;height:22px}
+.nav ul{list-style:none;margin:0;padding:0;display:flex;gap:28px;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+.nav ul a{text-decoration:none;color:var(--ink-soft);transition:color .2s}
+.nav ul a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 26px;border:1px solid var(--ink);border-radius:999px;text-decoration:none;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--ink);background:transparent;cursor:pointer;transition:background .25s,color .25s;font-family:inherit}
+.btn:hover,.btn:focus-visible{background:var(--ink);color:var(--ground);outline:none}
+.btn.solid{background:var(--ink);color:var(--ground)}
+.btn.solid:hover{background:var(--moss-deep);border-color:var(--moss-deep)}
+.btn.small{padding:10px 18px;font-size:.7rem}
+.nav > .wrap > ul{display:none}
+:focus-visible{outline:2px solid var(--water-deep);outline-offset:3px}
+
+/* Placeholder images */
+.ph{position:relative;overflow:hidden;background:
+  radial-gradient(120% 80% at 20% 15%,var(--ph-d) 0%,transparent 55%),
+  radial-gradient(90% 70% at 80% 90%,var(--ph-c) 0%,transparent 60%),
+  linear-gradient(160deg,var(--ph-a),var(--ph-b));
+  border-radius:var(--radius)}
+.ph::before{content:"";position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");opacity:.09;mix-blend-mode:multiply;pointer-events:none}
+.ph::after{content:attr(data-label);position:absolute;left:18px;bottom:16px;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);opacity:.75;font-weight:500}
+.ph .horizon{position:absolute;left:0;right:0;bottom:32%;height:1px;background:var(--ink);opacity:.08}
+
+/* Real photos */
+.photo{margin:0;position:relative;overflow:hidden;border-radius:var(--radius);background:var(--surface-2);max-width:100%}
+.photo img{display:block;width:100%;height:100%;object-fit:cover}
+.photo figcaption{position:absolute;left:18px;bottom:16px;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:#F6F5F0;opacity:.9;font-weight:500;text-shadow:0 1px 8px rgba(0,0,0,.45)}
+.strip .photo:first-child{aspect-ratio:4/3}
+.strip .photo img{object-position:50% 70%}
+
+.photo video{display:block;width:100%;height:100%;object-fit:cover}
+.strip .photo:nth-child(2){aspect-ratio:1/1}
+.strip .photo:last-child{aspect-ratio:3/4}
+.fac-list .photo.thumb{aspect-ratio:1;width:120px;justify-self:end}
+@media (max-width:720px){.fac-list .photo.thumb{width:100%;aspect-ratio:16/7;justify-self:stretch}}
+.band{position:relative;width:100%;height:clamp(320px,42vw,70vh);overflow:hidden;background:var(--surface-2)}
+.band video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.band::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(20,28,24,.55),rgba(20,28,24,.05) 60%)}
+.band-text{position:absolute;left:clamp(16px,4vw,48px);right:16px;bottom:clamp(28px,5vw,64px);z-index:1;font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.8rem,3.6vw,3rem);line-height:1.15;color:#F6F5F0;font-weight:300;text-wrap:balance;text-shadow:0 2px 20px rgba(0,0,0,.35)}
+.band-text em{font-style:italic;opacity:.85}
+
+
+/* Hero – full bleed */
+.hero{position:relative;min-height:min(88vh,820px);display:flex;align-items:flex-end;padding-block:clamp(72px,10vw,140px) clamp(48px,7vw,96px);overflow:hidden;color:#F6F5F0;background:#22302A}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(to top,rgba(20,28,24,.82) 0%,rgba(20,28,24,.42) 50%,rgba(20,28,24,.22) 100%)}
+.hero-inner{position:relative;z-index:1;max-width:44rem}
+.hero h1{font-size:clamp(3.2rem,8.5vw,7.4rem);line-height:.98;letter-spacing:-.015em;color:#F6F5F0}
+.hero h1 em{font-style:italic;font-weight:300;color:#DCE3D8}
+.hero .lede{margin-top:28px;color:rgba(246,245,240,.82);max-width:34rem}
+.hero .eyebrow.light{color:#DCE3D8}.hero .eyebrow.light::before{background:#DCE3D8}
+.hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:38px}
+.btn.light{background:#F6F5F0;color:#22302A;border-color:#F6F5F0}.btn.light:hover{background:#DCE3D8;border-color:#DCE3D8;color:#22302A}
+.btn.ghost{border-color:rgba(246,245,240,.7);color:#F6F5F0}.btn.ghost:hover{background:#F6F5F0;color:#22302A}
+.hero-meta{display:flex;gap:clamp(24px,4vw,56px);flex-wrap:wrap;padding-block:28px;border-bottom:1px solid var(--line)}
+.hero-meta div{font-size:.8rem;color:var(--ink-soft);letter-spacing:.02em}
+.hero-meta strong{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.9rem;font-weight:400;color:var(--ink);line-height:1.1;margin-bottom:2px}
+@media (max-width:880px){.hero{min-height:min(78vh,640px)}}
+
+/* Intro */
+.rhythm{margin-top:18px;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.3rem;letter-spacing:.12em;text-transform:uppercase;color:var(--moss-deep)}
+.intro-visual{aspect-ratio:4/5;margin-top:36px;max-width:420px}
+@media (max-width:880px){.intro-visual{max-width:100%;aspect-ratio:4/3}}
+.intro .wrap{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(32px,6vw,96px)}
+.intro-text{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.55rem,2.6vw,2.2rem);line-height:1.35;font-weight:300}
+.intro-text em{color:var(--moss-deep)}
+.intro-side p+p{margin-top:18px}
+.intro-side{color:var(--ink-soft);max-width:34rem;align-self:center}
+@media (max-width:880px){.intro .wrap{grid-template-columns:1fr}}
+
+/* Gallery strip */
+.strip{display:grid;grid-template-columns:1.2fr .8fr 1fr;gap:14px;padding-inline:clamp(16px,4vw,48px)}
+.strip .ph{aspect-ratio:1/1}
+.strip .ph:first-child{aspect-ratio:4/3}
+.strip .ph:last-child{aspect-ratio:3/4}
+@media (max-width:720px){.strip{grid-template-columns:1fr 1fr}.strip .ph:first-child,.strip .photo:first-child{grid-column:1/-1}}
+
+
+/* Ways */
+.ways-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:36px;border-top:1px solid var(--line-strong)}
+.way{display:flex;flex-direction:column;gap:12px;padding:32px 28px 32px 0;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;transition:color .2s}
+.way+.way{border-left:1px solid var(--line);padding-left:28px}
+.way-k{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);font-weight:500}
+.way p{color:var(--ink-soft);font-size:.95rem;flex:1}
+.way-cta{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--moss-deep)}
+.way:hover h3{color:var(--moss-deep)}
+@media (max-width:880px){.ways-grid{grid-template-columns:1fr}.way+.way{border-left:0;padding-left:0}}
+
+/* Facilities */
+.facilities{background:var(--surface)}
+.fac-head{display:flex;justify-content:space-between;align-items:end;gap:32px;flex-wrap:wrap;margin-bottom:clamp(40px,6vw,72px)}
+.fac-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-strong)}
+.fac-list li{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.6fr) 120px;gap:clamp(20px,4vw,64px);align-items:center;padding:clamp(22px,3vw,36px) 0;border-bottom:1px solid var(--line)}
+.fac-list h3{font-size:clamp(1.6rem,2.6vw,2.3rem)}
+.fac-list p{color:var(--ink-soft);max-width:36rem}
+.fac-list .ph{aspect-ratio:1;width:120px;justify-self:end}
+.fac-list .ph::after{display:none}
+.fac-list .num{font-size:.72rem;letter-spacing:.18em;color:var(--ink-faint);display:block;margin-bottom:8px}
+@media (max-width:720px){.fac-list li{grid-template-columns:1fr;gap:12px}.fac-list .ph{width:100%;aspect-ratio:16/7;justify-self:stretch}}
+
+/* Rent */
+.rent-head{display:flex;justify-content:space-between;align-items:end;gap:32px;flex-wrap:wrap;margin-bottom:clamp(40px,6vw,64px)}
+.rent-head h2 em{font-style:italic;color:var(--moss-deep)}
+.incl{list-style:none;margin:20px 0 0;padding:0;border-top:1px solid var(--line-strong)}
+.incl li{padding:18px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:baseline}
+.incl b{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:1.35rem}
+.incl span{color:var(--ink-soft);font-size:.95rem}
+@media (max-width:560px){.incl li{grid-template-columns:1fr;gap:4px}}
+
+.rent-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,96px);align-items:start}
+.rent-grid .ph{aspect-ratio:3/4;position:sticky;top:96px}
+.rent-uses{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:0;border-top:1px solid var(--line-strong)}
+.rent-uses li{padding:18px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;align-items:baseline}
+.rent-uses span{color:var(--ink-faint);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.rent-uses b{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:1.35rem}
+.rent-note{margin-top:32px;padding:24px 28px;background:var(--surface);border-left:1px solid var(--moss);color:var(--ink-soft);font-size:.95rem}
+@media (max-width:880px){.rent-grid{grid-template-columns:1fr}.rent-grid .ph{position:relative;top:auto;aspect-ratio:16/10}}
+
+/* Yggdrasil */
+/* Deep textured dark ground */
+.grain{position:relative;isolation:isolate}
+.grain::before{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;background:
+  radial-gradient(120% 90% at 15% 0%, rgba(120,150,120,.22) 0%, transparent 55%),
+  radial-gradient(90% 70% at 90% 100%, rgba(200,182,156,.14) 0%, transparent 60%),
+  radial-gradient(70% 50% at 50% 50%, rgba(0,0,0,0) 0%, rgba(8,14,10,.45) 100%)}
+.grain::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.24;mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.85 0 0 0 0 0.9 0 0 0 0 0.82 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:240px 240px}
+
+.ygg{background:#1C2822;color:var(--ground);position:relative;overflow:hidden}
+.ygg .eyebrow{color:var(--oak)}
+.ygg .eyebrow::before{background:var(--oak)}
+.ygg .lede{color:color-mix(in srgb,var(--ground) 72%,transparent)}
+.ygg-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(32px,6vw,96px);align-items:center;position:relative}
+.ygg h2{font-size:clamp(2.8rem,6.5vw,5.6rem);font-style:italic;letter-spacing:-.01em}
+.ygg h2 span{font-style:normal;display:block;font-size:.42em;letter-spacing:.04em;margin-top:10px;opacity:.75}
+.ygg .btn{border-color:var(--ground);color:var(--ground)}
+.ygg .btn:hover{background:var(--ground);color:var(--ink)}
+.ygg-tree{position:absolute;right:-6%;top:-10%;width:52%;opacity:.14;pointer-events:none}
+.ygg-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px;padding-top:28px;border-top:1px solid color-mix(in srgb,var(--ground) 22%,transparent)}
+.ygg-facts div{font-size:.8rem;opacity:.75}
+.ygg-facts strong{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-weight:300;font-size:1.8rem;line-height:1.1;margin-bottom:2px;opacity:1}
+.ygg .ph{aspect-ratio:4/5;--ph-a:#2B3A34;--ph-b:#1B2420;--ph-c:#3B4E45;--ph-d:#34463F}
+.ygg .ph::after{color:var(--oak)}
+.ygg .ph::before{mix-blend-mode:screen}
+@media (max-width:880px){.ygg-grid{grid-template-columns:1fr}.ygg-facts{grid-template-columns:1fr 1fr}.ygg .ph{aspect-ratio:16/10}}
+
+.ygg .photo.ygg-main{aspect-ratio:4/5}
+.ygg .photo figcaption{color:var(--oak)}
+.ygg-gallery-head{margin-top:clamp(56px,8vw,110px);display:flex;justify-content:space-between;align-items:end;gap:32px;flex-wrap:wrap;margin-bottom:36px}
+.ygg-gallery{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:auto;gap:12px;grid-auto-flow:dense}
+.ygg-gallery .g{aspect-ratio:1;margin:0}
+.ygg-gallery .g.wide{grid-column:span 2;aspect-ratio:2/1}
+.ygg-gallery .g.tall{grid-row:span 2;aspect-ratio:auto;height:100%}
+.ygg-gallery .g.full{grid-column:1/-1;aspect-ratio:21/9}
+.ygg-gallery .g img{width:100%;height:100%;object-fit:cover}
+@media (max-width:880px){.ygg-gallery{grid-template-columns:repeat(2,1fr)}.ygg-gallery .g.tall{grid-row:auto;aspect-ratio:1}.ygg-gallery .g.full{aspect-ratio:16/10}}
+@media (max-width:880px){.ygg .photo.ygg-main{aspect-ratio:4/3}}
+
+/* Calendar */
+.cal-head{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-bottom:40px}
+.cal{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-strong)}
+.cal li{display:grid;grid-template-columns:110px 1fr auto;gap:clamp(20px,4vw,56px);align-items:center;padding:24px 0;border-bottom:1px solid var(--line);transition:background .2s}
+.cal .date{font-family:"Cormorant Garamond",Georgia,serif;line-height:1}
+.cal .date b{display:block;font-size:2.6rem;font-weight:300}
+.cal .date span{font-size:.72rem;font-family:"Manrope",sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);font-weight:500}
+.cal h3{font-size:1.45rem;font-weight:400}
+.cal p{color:var(--ink-soft);font-size:.95rem;margin-top:4px}
+.cal .tag{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;font-weight:500;padding:6px 12px;border:1px solid var(--line-strong);border-radius:999px;color:var(--ink-soft);white-space:nowrap}
+.cal .tag.festival{border-color:var(--oak);color:var(--oak)}
+.cal .tag.open{border-color:var(--moss);color:var(--moss)}
+.cal-foot{margin-top:20px;font-size:.82rem;color:var(--ink-faint)}
+
+.strip.strip-2{grid-template-columns:1.4fr 1fr}.strip.strip-2 .photo:first-child{aspect-ratio:4/3}.strip.strip-2 .photo:last-child{aspect-ratio:auto;height:100%}
+@media (max-width:720px){.strip.strip-2{grid-template-columns:1fr}.strip.strip-2 .photo:last-child{aspect-ratio:4/3;height:auto}}
+/* Platsen med mossvideo som bakgrund */
+.intro-video{position:relative;overflow:hidden;background:#22302A;color:#F6F5F0;padding-block:clamp(96px,14vw,200px)}
+.intro-video .intro-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.intro-video .intro-shade{position:absolute;inset:0;background:linear-gradient(to right,rgba(20,28,24,.72) 0%,rgba(20,28,24,.62) 45%,rgba(20,28,24,.7) 100%)}
+.intro-video .wrap{position:relative;z-index:1}
+.intro-video .eyebrow{color:#DCE3D8}.intro-video .eyebrow::before{background:#DCE3D8}
+.intro-video .rhythm{color:#F6F5F0}
+.intro-video .intro-side{color:rgba(246,245,240,.9);text-shadow:0 1px 12px rgba(0,0,0,.35)}
+@media (max-width:880px){.intro-video .intro-shade{background:linear-gradient(to top,rgba(20,28,24,.8),rgba(20,28,24,.6))}}
+
+/* ===== Linne – ljus, mjuk spa-känsla (vald 2026-09-26). Videor visas naturliga, utan toning. ===== */
+.btn{letter-spacing:.2em;font-size:.72rem;padding:15px 30px}
+.btn.solid{background:var(--moss-deep);border-color:var(--moss-deep);color:var(--ground)}
+.btn.solid:hover{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.hero{display:flex;flex-direction:column;min-height:0;padding:0;color:var(--ink);background:var(--ground)}
+.hero-inner{order:0}.hero-bg{order:1}.hero-shade{order:2}
+.hero-bg{position:relative;display:block;height:min(72vh,660px)}
+.hero-shade{top:auto;bottom:auto;height:0;background:none}
+.hero-inner{text-align:center;margin-inline:auto;padding-block:clamp(36px,5vw,64px) clamp(28px,3.5vw,44px)}
+.hero-inner{max-width:62rem}
+.hero h1{font-size:clamp(2.7rem,5.6vw,5rem)}
+.hero .lede{max-width:40rem}
+@media (min-width:900px){.h1br{display:none}}
+.hero .lede{margin-top:18px;font-size:1.05rem}
+.hero-actions{margin-top:26px}
+.hero-bg{width:min(1240px,calc(100% - 2*clamp(16px,4vw,48px)));margin-inline:auto;height:clamp(300px,56vh,620px);object-fit:cover;border-radius:var(--radius)}
+@media (max-width:560px){.hero .lede{font-size:1rem}.hero-bg{width:100%;height:56vh;border-radius:0}}
+.hero h1{color:var(--ink);font-weight:300}
+.hero h1 em{color:var(--moss-deep)}
+.hero .lede{color:var(--ink-soft);margin-inline:auto}
+.hero .eyebrow{justify-content:center}
+.hero .eyebrow.light{color:var(--moss-deep)}
+.hero .eyebrow.light::before{background:var(--moss-deep)}
+.hero .eyebrow::after{content:"";width:28px;height:1px;background:var(--moss-deep);opacity:.7}
+@media (max-width:560px){.hero .eyebrow::before,.hero .eyebrow::after{display:none}}
+.hero-actions{justify-content:center}
+.hero .btn.light{background:var(--moss-deep);border-color:var(--moss-deep);color:var(--ground)}
+.hero .btn.light:hover{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.hero .btn.ghost{border-color:var(--line-strong);color:var(--ink);background:transparent}
+.hero .btn.ghost:hover{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.intro-video{color:var(--ink);background:var(--ground);padding-block:clamp(72px,10vw,140px)}
+.intro-video .intro-shade{display:none}
+.intro-video .intro-bg{position:relative;display:block;width:min(1240px,calc(100% - 2*clamp(16px,4vw,48px)));height:clamp(300px,42vw,560px);margin:0 auto clamp(40px,6vw,72px);border-radius:var(--radius)}
+.intro-video .eyebrow,.intro-video .rhythm{color:var(--moss-deep)}
+.intro-video .eyebrow::before{background:var(--moss-deep)}
+.intro-video .intro-side{color:var(--ink-soft);text-shadow:none}
+
+
+/* Mörkgrönt tema (växlas med knappen bredvid EN) */
+:root[data-theme="dark"]{
+  --ground:#151C18; --surface:#1D2620; --surface-2:#252F29;
+  --line:rgba(236,233,225,.12); --line-strong:rgba(236,233,225,.3);
+  --ink:#ECE9E1; --ink-soft:#B4B9B2; --ink-faint:#7F8781;
+  --moss:#95A78F; --moss-deep:#B6C6B0; --water:#6E8A91; --water-deep:#9DB3B8; --oak:#B8A588;
+  --ph-a:#232E28; --ph-b:#2B3A34; --ph-c:#34463F; --ph-d:#1B2420;
+  --shadow:0 30px 60px -30px rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+.theme-btn{background:none;border:1px solid var(--line-strong);border-radius:999px;width:34px;height:31px;padding:0;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:inherit}
+.theme-btn:hover{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.theme-btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.theme-btn .i-sun{display:none}
+:root[data-theme="dark"] .theme-btn .i-sun{display:block}
+:root[data-theme="dark"] .theme-btn .i-leaf{display:none}
+.mobile-nav .theme-txt{display:flex;margin:12px auto 0;max-width:720px;justify-content:center;background:none;border:1px solid var(--line-strong);border-radius:999px;padding:12px 18px;font:inherit;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:inherit;cursor:pointer;width:100%}
+
+/* Nyhetsbrev – egen sektion */
+.nl-band{background:var(--surface)}
+.nl-band-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:clamp(32px,6vw,96px);align-items:end}
+.nl-band .newsletter{margin-top:36px;max-width:36rem}
+.nl-band .nl-row{gap:16px}
+.nl-band .newsletter small{margin-top:14px}
+@media (max-width:880px){.nl-band-grid{grid-template-columns:1fr;align-items:start}}
+/* Hyra: rullgardin + chips */
+.incl-acc{margin-top:20px;border-top:1px solid var(--line-strong)}
+.incl-acc details{border-bottom:1px solid var(--line)}
+.incl-acc summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0;cursor:pointer}
+.incl-acc summary::-webkit-details-marker{display:none}
+.incl-acc summary b{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:1.45rem}
+.incl-acc summary:hover b{color:var(--moss-deep)}
+.acc-ic{position:relative;width:14px;height:14px;flex:0 0 14px}
+.acc-ic::before,.acc-ic::after{content:"";position:absolute;left:0;top:50%;width:14px;height:1px;background:currentColor;transition:transform .3s}
+.acc-ic::after{transform:rotate(90deg)}
+.incl-acc details[open] .acc-ic::after{transform:rotate(0)}
+.incl-acc details p{margin:0;padding:0 0 22px;color:var(--ink-soft);font-size:.98rem;max-width:34rem}
+.uses-chips{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:10px}
+.uses-chips li{padding:10px 18px;border:1px solid var(--line-strong);border-radius:999px;font-size:.92rem;color:var(--ink);background:var(--surface)}
+.uses-note{margin-top:20px;color:var(--ink-soft);font-size:1rem;max-width:34rem}
+/* 3D-modell */
+.m3{padding-top:clamp(56px,8vw,110px);padding-bottom:0}
+.hero + .m3{padding-top:clamp(72px,10vw,140px)}
+.m3-head{display:flex;justify-content:space-between;align-items:end;gap:24px 32px;flex-wrap:wrap;margin-bottom:32px}
+.m3-frame{position:relative;height:clamp(440px,72vh,760px);border-radius:var(--radius);overflow:hidden;background:var(--surface-2);border:1px solid var(--line)}
+.m3-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none}
+.m3-frame.active iframe{pointer-events:auto}
+.m3-cover{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;border:0;padding:24px;cursor:pointer;font:inherit;color:#F6F5F0;
+  background:linear-gradient(to top,rgba(20,28,24,.55),rgba(20,28,24,.12) 60%,rgba(20,28,24,.05))}
+.m3-cover small{font-size:.78rem;letter-spacing:.08em;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+.m3-cover:hover .btn,.m3-cover:focus-visible .btn{background:#DCE3D8;border-color:#DCE3D8}
+.m3-frame.active .m3-cover{display:none}
+.m3-close{position:absolute;right:12px;top:12px;z-index:3;display:none;background:#F6F5F0;color:#22302A;border:1px solid rgba(34,48,42,.3);border-radius:999px;padding:8px 14px;font:inherit;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;cursor:pointer}
+.m3-frame.active .m3-close{display:block}
+.m3-foot{margin-top:14px;font-size:.82rem;color:var(--ink-faint);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.m3-foot a{color:var(--ink-soft)}
+@media (max-width:640px){.m3-frame{height:78vh}}
+
+/* Månadskalender – event, uthyrt, ledigt */
+.mc-legend{display:flex;flex-wrap:wrap;gap:10px 22px;margin:0 0 22px;padding:0;list-style:none;font-size:.78rem;letter-spacing:.06em;color:var(--ink-soft)}
+.mc-legend li{display:flex;align-items:center;gap:8px}
+.mc-sw{width:14px;height:14px;border-radius:3px;border:1px solid var(--line-strong);display:inline-block}
+.mc-sw.ev{background:var(--oak);border-color:var(--oak)}
+.mc-sw.bk{background:repeating-linear-gradient(135deg,var(--surface-2) 0 3px,var(--ground) 3px 6px);border-color:var(--line-strong)}
+.mc-sw.fr{background:var(--ground)}
+.mc-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.mc-nav{width:44px;height:44px;border-radius:999px;border:1px solid var(--line-strong);background:none;color:inherit;font:inherit;font-size:1.2rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.mc-nav:hover:not(:disabled){background:var(--ink);color:var(--ground)}
+.mc-nav:disabled{opacity:.3;cursor:default}
+.mc-months{display:grid;grid-template-columns:1fr;gap:clamp(24px,4vw,56px)}
+@media (min-width:900px){.mc-months{grid-template-columns:1fr 1fr}}
+.mc-title{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.7rem;font-weight:400;margin:0 0 12px;text-transform:capitalize}
+.mc-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.mc-wd{font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);text-align:center;padding:4px 0 6px;font-weight:500}
+.mc-day{position:relative;aspect-ratio:1;min-width:0;border:1px solid var(--line);border-radius:3px;background:var(--ground);color:var(--ink);font:inherit;font-size:.9rem;padding:0;cursor:pointer;display:flex;align-items:flex-start;justify-content:flex-start;padding:6px 7px;transition:background .15s,border-color .15s}
+.mc-day:hover{border-color:var(--ink)}
+.mc-day.empty{border:0;background:none;cursor:default;pointer-events:none}
+.mc-day.past{color:var(--ink-faint);opacity:.45;cursor:default;pointer-events:none}
+.mc-day.ev{background:var(--oak);border-color:var(--oak);color:#22302A;font-weight:500}
+.mc-day.ev::after{content:"";position:absolute;left:7px;right:7px;bottom:7px;height:2px;border-radius:2px;background:#22302A;opacity:.35}
+.mc-day.bk{background:repeating-linear-gradient(135deg,var(--surface-2) 0 4px,var(--ground) 4px 8px);color:var(--ink-faint);cursor:not-allowed}
+.mc-day.bk:hover{border-color:var(--line)}
+.mc-day.sel{background:var(--moss-deep);border-color:var(--moss-deep);color:var(--ground)}
+.mc-day.today{box-shadow:inset 0 0 0 1px var(--moss)}
+.mc-panel{margin-top:24px;padding:22px 24px;background:var(--surface);border-left:1px solid var(--moss);display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:space-between}
+.mc-panel p{margin:0;color:var(--ink-soft);max-width:40rem}
+.mc-panel h3{font-size:1.5rem;margin-bottom:4px}
+.mc-panel .btn{flex:0 0 auto}
+.cal-sub{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.7rem;font-weight:400;margin:clamp(48px,7vw,80px) 0 18px}
+@media (max-width:560px){.mc-day{font-size:.8rem;padding:4px 5px}.mc-grid{gap:3px}.mc-panel .btn{width:100%;justify-content:center}}
+
+.cal .cal-link{display:inline-block;margin-top:8px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--moss-deep);text-decoration:none}
+.cal .cal-link:hover{text-decoration:underline}
+@media (max-width:640px){.cal li{grid-template-columns:80px 1fr}.cal .tag{grid-column:2;justify-self:start}.cal .date b{font-size:2rem}}
+
+/* Hosts */
+.hosts{background:var(--surface)}
+.hosts-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(32px,6vw,96px);align-items:center}
+.hosts .ph{aspect-ratio:4/5}
+.hosts blockquote{margin:36px 0 0;padding:0;font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;font-size:1.5rem;line-height:1.4;color:var(--moss-deep)}
+.hosts blockquote footer{margin-top:14px;font-family:"Manrope",sans-serif;font-style:normal;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint)}
+.hosts p+p{margin-top:18px}
+@media (max-width:880px){.hosts-grid{grid-template-columns:1fr}.hosts .ph{aspect-ratio:16/10}}
+
+/* Find */
+.find-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,96px)}
+.find dl{margin:32px 0 0;display:grid;grid-template-columns:auto 1fr;gap:12px 28px;border-top:1px solid var(--line-strong);padding-top:20px}
+.find dt{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);font-weight:500;padding-top:4px}
+.find dd{margin:0;color:var(--ink-soft)}
+.map{aspect-ratio:1;position:relative;background:var(--surface-2);border-radius:var(--radius);overflow:hidden}
+.map iframe,.map-fallback{position:absolute;inset:0;width:100%;height:100%;border:0}
+.map iframe{filter:saturate(.75) contrast(1.02);z-index:1}
+.map-fallback{color:var(--ink)}
+.map-link{position:absolute;left:16px;bottom:16px;background:var(--ground);color:var(--ink);padding:10px 16px;border-radius:999px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;text-decoration:none;border:1px solid var(--line-strong)}
+.map-link:hover{background:var(--ink);color:var(--ground)}
+@media (max-width:880px){.find-grid{grid-template-columns:1fr}.map{aspect-ratio:16/10}}
+
+
+/* Stay */
+.stay{background:var(--surface)}
+.stay-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid var(--line-strong)}
+.stay-grid>div{padding:32px 32px 32px 0;border-bottom:1px solid var(--line)}
+.stay-grid>div:nth-child(even){border-left:1px solid var(--line);padding-left:32px}
+.stay-grid h3{font-size:clamp(1.5rem,2.4vw,1.9rem);margin-bottom:12px}
+.stay-grid p{color:var(--ink-soft);font-size:.98rem;max-width:34rem}
+.stay-grid p+p{margin-top:12px}
+@media (max-width:720px){.stay-grid{grid-template-columns:1fr}.stay-grid>div:nth-child(even){border-left:0;padding-left:0}}
+
+/* Closing */
+.closing{padding-block:clamp(48px,7vw,96px) 0;text-align:left}
+.closing-text{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(2rem,4.5vw,3.6rem);line-height:1.15;font-weight:300}
+.closing-text em{font-style:italic;color:var(--moss-deep)}
+
+/* Form */
+.book-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(32px,6vw,96px)}
+form{display:grid;grid-template-columns:1fr 1fr;gap:26px 24px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field.full{grid-column:1/-1}
+label{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);font-weight:500}
+input,select,textarea{font:inherit;font-weight:300;color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--line-strong);padding:10px 0;border-radius:0;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-bottom-color:var(--moss)}
+textarea{min-height:120px;resize:vertical}
+select option{color:#22302A}
+.form-actions{grid-column:1/-1;display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:8px}
+.form-actions small{color:var(--ink-faint);font-size:.8rem}
+.toast{grid-column:1/-1;padding:18px 22px;background:var(--surface);border-left:1px solid var(--moss);color:var(--ink-soft)}
+@media (max-width:880px){.book-grid{grid-template-columns:1fr}}
+@media (max-width:560px){form{grid-template-columns:1fr}}
+
+/* Kontakt via mejl */
+.book-grid{align-items:center}
+.mail-card{background:var(--surface);border-left:1px solid var(--moss);padding:clamp(28px,4vw,44px)}
+.mail-k{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);font-weight:500}
+.mail-list{list-style:none;margin:18px 0 0;padding:0;counter-reset:m;border-top:1px solid var(--line-strong)}
+.mail-list li{counter-increment:m;display:grid;grid-template-columns:2.2rem 1fr;column-gap:12px;padding:18px 0;border-bottom:1px solid var(--line)}
+.mail-list li::before{content:counter(m);grid-row:1/3;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.7rem;line-height:1;color:var(--moss-deep)}
+.mail-list b{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:1.4rem;line-height:1.2}
+.mail-list span{color:var(--ink-soft);font-size:.95rem}
+.mail-actions{margin-top:28px;display:flex;flex-wrap:wrap;align-items:center;gap:14px 24px}
+.mail-addr{color:var(--ink-soft);font-size:.95rem;text-underline-offset:3px}
+.mail-addr:hover{color:var(--ink)}
+@media (max-width:560px){.mail-actions .btn{width:100%;justify-content:center}}
+
+/* Frågor & svar (från variant 10) */
+.faq-sec{background:var(--surface)}
+.faq-head{display:flex;justify-content:space-between;align-items:end;gap:24px 32px;flex-wrap:wrap;margin-bottom:clamp(32px,5vw,56px)}
+.faq{border-top:1px solid var(--line-strong);display:grid;grid-template-columns:1fr 1fr;column-gap:clamp(24px,4vw,64px)}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-item summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 0;cursor:pointer}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-q{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.4rem,2.2vw,1.7rem);line-height:1.15}
+.faq-item summary:hover .faq-q{color:var(--moss-deep)}
+.faq-item[open] .acc-ic::after{transform:rotate(0)}
+.faq-item.marked .faq-q::after{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--oak);margin-left:10px;vertical-align:middle}
+.faq-a{padding:0 0 24px}
+.faq-a ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;color:var(--ink-soft);font-size:.98rem;max-width:34rem}
+.faq-a li{padding-left:18px;position:relative}
+.faq-a li::before{content:"";position:absolute;left:0;top:.8em;width:8px;height:1px;background:var(--moss)}
+.faq-more{margin-top:16px;background:none;border:1px solid var(--line-strong);border-radius:999px;padding:8px 14px;font:inherit;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--ink);cursor:pointer}
+.faq-more:hover{border-color:var(--ink)}
+.faq-more[aria-pressed="true"]{background:var(--moss-deep);border-color:var(--moss-deep);color:var(--ground)}
+@media (max-width:820px){.faq{grid-template-columns:1fr}}
+
+/* Platsen-texten under drönarvideon i heron */
+.hero-story{order:3;display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(24px,6vw,96px);padding-block:clamp(40px,6vw,80px) 0;text-align:left;color:var(--ink)}
+.hero .hero-story .eyebrow{color:var(--moss-deep);justify-content:flex-start}.hero .hero-story .eyebrow::before{display:block;background:var(--moss-deep)}.hero .hero-story .eyebrow::after{display:none}
+.hero-story .rhythm{color:var(--moss-deep)}
+.hero-story-text{color:var(--ink-soft);max-width:36rem}
+.hero-story-text p+p{margin-top:18px}
+@media (max-width:880px){.hero-story{grid-template-columns:1fr;gap:18px}}
+
+/* Kontakt: tre frågor + mejlutkast (från variant 1 och 6) */
+:root{--band:#2F3A31;--band-ink:#F2EDE3;--band-soft:rgba(242,237,227,.76);--band-line:rgba(242,237,227,.22);--band-accent:#C9D1B2;--paper:#F2EDE3;--paper-ink:#2B2924;--paper-line:rgba(43,41,36,.16)}
+:root[data-theme="dark"]{--band:#0E1411;--band-line:rgba(242,237,227,.16)}
+.mailband{background:var(--band);color:var(--band-ink)}
+#kalender{padding-bottom:clamp(56px,7vw,96px)}
+.mail-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(40px,6vw,88px);align-items:start}
+.mailband .eyebrow{color:var(--band-accent)}.mailband .eyebrow::before{background:var(--band-accent)}
+.mail-title{margin-top:18px;font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(3.4rem,9vw,7.6rem);line-height:.9;letter-spacing:-.015em;color:var(--band-ink)}
+.mail-title em{color:var(--band-accent)}
+.mail-lead{margin-top:22px;color:var(--band-soft);font-size:1.08rem;max-width:34rem}
+.q3{margin-top:36px;display:grid;gap:26px}
+.q{border:0;margin:0;padding:0;min-width:0}
+.q legend{padding:0;margin-bottom:12px;display:flex;align-items:baseline;gap:12px;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.55rem;line-height:1.1;color:var(--band-ink)}
+.qn{font-family:"Manrope",sans-serif;font-size:.72rem;letter-spacing:.14em;color:var(--band-accent);border:1px solid var(--band-line);border-radius:999px;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;flex:none;transform:translateY(-3px)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:transparent;border:1px solid var(--band-line);color:var(--band-ink);border-radius:999px;padding:9px 16px;font:inherit;font-size:.92rem;cursor:pointer;transition:background .15s,border-color .15s}
+.chip:hover{border-color:var(--band-ink)}
+.chip[aria-pressed="true"]{background:var(--band-ink);border-color:var(--band-ink);color:var(--band)}
+.q-note{margin-top:10px;font-size:.9rem;color:var(--band-accent)}
+.mailband label.q-field{display:grid;gap:4px;margin-top:14px;color:var(--band-soft);font-size:.7rem}
+.mailband .q-field input,.mailband .q-field textarea{color:var(--band-ink);border-bottom-color:var(--band-line);font-size:1rem;letter-spacing:0;text-transform:none}
+.mailband .q-field input::placeholder,.mailband .q-field textarea::placeholder{color:var(--band-soft);opacity:.6}
+.mailband .q-field input:focus,.mailband .q-field textarea:focus{border-bottom-color:var(--band-accent)}
+.mailband .q-field textarea{min-height:84px}
+.mail-right{position:sticky;top:96px;display:grid;gap:22px}
+.draft{background:var(--paper);color:var(--paper-ink)}
+.draft-head{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;padding:16px 20px;border-bottom:1px solid var(--paper-line);font:400 13px/1.4 ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+.draft-head dt{color:#7A7368}.draft-head dd{margin:0;word-break:break-word}
+.draft pre{margin:0;padding:20px;font:400 13px/1.65 ui-monospace,"SF Mono",Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;min-height:15em}
+.draft-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 20px 18px}
+.draft-status{font-size:.85rem;color:#5E6B57}
+.btn-line{background:none;border:1px solid var(--paper-line);color:var(--paper-ink);padding:9px 14px;font:inherit;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;cursor:pointer;border-radius:999px}
+.btn-line:hover{border-color:var(--paper-ink)}
+.btn-line.light{border-color:var(--band-line);color:var(--band-ink)}
+.btn-line.light:hover{border-color:var(--band-ink)}
+.mail-actions{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px}
+.mail-cta{display:inline-flex;align-items:center;gap:16px;background:var(--paper);color:var(--paper-ink);text-decoration:none;font-weight:600;font-size:1.05rem;padding:18px 26px;border-radius:999px}
+.mail-cta span{font-size:1.3rem;line-height:0}
+.mail-cta:hover{background:var(--band-accent)}
+.addr{display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap}
+.addr-txt{user-select:all;-webkit-user-select:all;border-bottom:1px solid var(--band-line);padding-bottom:2px;word-break:break-all}
+.mail-help{font-size:.85rem;color:var(--band-soft)}
+.mailband :focus-visible{outline-color:var(--band-accent)}
+@media (max-width:880px){.mail-grid{grid-template-columns:1fr}.mail-right{position:static}}
+@media (max-width:560px){.mail-cta{width:100%;justify-content:center}.chip{padding:9px 14px}}
+
+/* Footer */
+footer.site{border-top:1px solid var(--line);padding-block:48px 40px;font-size:.82rem;color:var(--ink-soft)}
+footer.site .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:end}
+footer.site .brand{font-size:1.8rem}
+footer.site ul{list-style:none;margin:0;padding:0;display:flex;gap:22px;flex-wrap:wrap}
+footer.site a{text-decoration:none}
+footer.site a:hover{text-decoration:underline}
+
+/* Reveal */
+.reveal{opacity:1;transform:none;transition:opacity .9s ease,transform .9s ease}
+
+/* Mobile first */
+html,body{overflow-x:clip}
+video{max-width:100%}
+.photo,.ph,.g,.strip > *,.hero-grid > *{min-width:0}
+.menu-btn{display:inline-flex;background:none;border:1px solid var(--line-strong);border-radius:999px;width:44px;height:44px;align-items:center;justify-content:center;cursor:pointer;color:inherit;padding:0}
+.menu-btn span{display:block;width:18px;height:1px;background:currentColor;position:relative}
+.menu-btn span::before,.menu-btn span::after{content:"";position:absolute;left:0;width:18px;height:1px;background:currentColor}
+.menu-btn span::before{top:-6px}.menu-btn span::after{top:6px}
+.mobile-nav{display:block;position:fixed;inset:0;top:0;z-index:30;background:var(--ground);padding:calc(24px + env(safe-area-inset-top,0px)) clamp(16px,6vw,32px) 32px;transform:translateY(-100%);transition:transform .35s ease;overflow:auto}
+.mobile-nav.open{transform:none}
+  .mobile-nav ul{list-style:none;margin:56px auto 0;padding:0;display:grid;gap:4px;max-width:720px}
+  .mobile-nav .btn,.mobile-nav .lang-btn{margin-left:auto;margin-right:auto;display:flex;max-width:720px}
+  .mobile-nav a{display:block;padding:16px 0;border-bottom:1px solid var(--line);text-decoration:none;font-family:"Cormorant Garamond",Georgia,serif;font-size:2rem;font-weight:300}
+  .mobile-nav .close{position:absolute;right:clamp(16px,6vw,32px);top:calc(20px + env(safe-area-inset-top,0px));background:none;border:1px solid var(--line-strong);border-radius:999px;width:44px;height:44px;font-size:1.4rem;line-height:1;cursor:pointer;color:inherit}
+  .mobile-nav .btn{margin-top:28px;justify-content:center;width:100%}
+  body.nav-open{overflow:hidden}
+@media (max-width:820px){ .nav .btn.small{display:none} }
+@media (max-width:560px){
+  .hero-actions .btn,.hosts .btn,.tix .btns .btn,.rent-grid .btn{width:100%;justify-content:center}
+  .hero-meta{display:grid;grid-template-columns:1fr 1fr;gap:18px 12px}
+  section{padding-block:56px}
+  .lede{font-size:1.05rem}
+  .cal li{padding:18px 0}
+  .form-actions .btn{width:100%;justify-content:center}
+}
+
+.lang-btn{background:none;border:1px solid var(--line-strong);border-radius:999px;padding:8px 12px;font:inherit;font-size:.7rem;letter-spacing:.16em;font-weight:500;cursor:pointer;color:inherit;line-height:1}
+.lang-btn:hover{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.nav-right{display:flex;align-items:center;gap:10px}
+
+/* Back to top */
+.totop{position:fixed;right:clamp(16px,3vw,32px);bottom:calc(clamp(16px,3vw,32px) + env(safe-area-inset-bottom,0px));z-index:25;width:48px;height:48px;border-radius:999px;border:1px solid var(--line-strong);background:color-mix(in srgb,var(--ground) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transform:translateY(12px);pointer-events:none;transition:opacity .3s,transform .3s,background .2s,color .2s}
+.totop.show{opacity:1;transform:none;pointer-events:auto}
+.totop:hover{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.totop svg{width:18px;height:18px}
+
+/* Newsletter */
+.newsletter{margin-top:32px;max-width:36rem}
+.newsletter label{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);font-weight:500;display:block}
+.nl-row{display:flex;gap:12px;align-items:flex-end;margin-top:8px}
+.nl-row input{flex:1;font:inherit;font-weight:300;color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--line-strong);padding:12px 0;border-radius:0;min-width:0}
+.nl-row input:focus{outline:none;border-bottom-color:var(--moss)}
+.nl-row input::placeholder{color:var(--ink-faint)}
+.newsletter small{display:block;margin-top:12px;color:var(--ink-faint);font-size:.8rem}
+.newsletter .toast{margin-top:16px;padding:16px 20px;background:var(--surface-2);border-left:1px solid var(--moss);color:var(--ink-soft);font-size:.95rem}
+@media (max-width:560px){.nl-row{flex-direction:column;align-items:stretch}.nl-row .btn{width:100%;justify-content:center}}
+
+/* Newsletter popup */
+.nl-pop{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;padding:clamp(16px,4vw,32px);background:rgba(20,28,24,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .4s}
+.nl-pop.show{opacity:1;pointer-events:auto}
+.nl-card{position:relative;width:min(520px,100%);background:#F6F5F0;color:#22302A;--ground:#F6F5F0;--surface:#ECE9E1;--surface-2:#E2DED4;--ink:#22302A;--ink-soft:#5B6863;--ink-faint:#8B958F;--line:rgba(34,48,42,.14);--line-strong:rgba(34,48,42,.32);--moss:#6F7F6A;--moss-deep:#4E5D4B;--oak:#4E5D4B;padding:clamp(28px,5vw,48px);border-radius:var(--radius);box-shadow:var(--shadow,0 30px 60px -30px rgba(0,0,0,.5));transform:translateY(16px);transition:transform .4s}
+.nl-pop.show .nl-card{transform:none}
+.nl-card .close{position:absolute;right:14px;top:14px;width:40px;height:40px;border-radius:999px;border:1px solid var(--line-strong);background:none;color:#22302A;font-size:1.3rem;line-height:1;cursor:pointer}
+.nl-card .close:hover{background:var(--ink);color:var(--ground)}
+.nl-card h3{font-size:clamp(1.8rem,3.5vw,2.4rem);margin-top:14px;font-weight:300}
+.nl-card p{color:var(--ink-soft);margin-top:14px;max-width:32rem}
+.nl-card .newsletter,form.newsletter{display:block;margin-top:24px;max-width:none}
+.nl-card .newsletter small,.nl-card .newsletter .toast{display:block}
+.nl-card .newsletter .toast[hidden],.newsletter .toast[hidden]{display:none}
+.nl-card .nl-row{display:flex;gap:12px;align-items:flex-end}
+.nl-card .nl-row input{flex:1 1 auto;width:100%;min-width:0}
+.nl-card .nl-row .btn{flex:0 0 auto}
+.nl-card label{display:block;margin-bottom:0}
+.nl-card .later{display:block;margin-top:18px;background:none;border:0;color:#8B958F;font:inherit;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;padding:0}
+.nl-card .later:hover{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.nl-pop,.nl-card{transition:none}}
+
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Skutesjön, till toppen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M12 3v18M12 3c-3 3-6 4-8 4 2 2 5 3 8 3-3 0-6 1-8 3 2 1 5 2 8 2M12 3c3 3 6 4 8 4-2 2-5 3-8 3 3 0 6 1 8 3-2 1-5 2-8 2"/></svg>
+      Skutesjön
+    </a>
+    <ul>
+      <li><a href="#platsen">Platsen</a></li>
+      <li><a href="#hyra">Hyra</a></li>
+      <li><a href="https://claude.ai/artifact/5yKpSaKpB2yKHFZRwqEUBW">Festivalen Yggdrasil</a></li>
+      <li><a href="#kalender">Kalender</a></li>
+      <li><a href="#hitta">Hitta hit</a></li>
+    </ul>
+    <div class="nav-right"><button class="lang-btn" type="button" aria-label="Switch to English">EN</button><button class="theme-btn" type="button" aria-label="Byt till mörkgrönt tema" aria-pressed="false"><svg class="i-leaf" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z"/><path d="M5 19l8-8"/></svg><svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg></button><a class="btn small" href="#boka">Kontakt</a>
+  <button class="menu-btn" id="menuBtn" aria-label="Meny" aria-expanded="false" aria-controls="mobileNav"><span></span></button></div>
+  </div>
+</header>
+<nav class="mobile-nav" id="mobileNav" aria-label="Mobilmeny"><button class="close" aria-label="Stäng">×</button><ul><li><a href="#platsen">Platsen</a></li><li><a href="#faciliteter">Faciliteter</a></li><li><a href="#hyra">Hyra platsen</a></li><li><a href="https://claude.ai/artifact/5yKpSaKpB2yKHFZRwqEUBW">Festivalen Yggdrasil</a></li><li><a href="#om">Om oss</a></li><li><a href="#boende">Frågor &amp; svar</a></li><li><a href="#kalender">Kalender</a></li><li><a href="#boka">Kontakt</a></li><li><a href="#hitta">Hitta hit</a></li></ul><a class="btn solid" href="#boka">Kontakt</a><button class="lang-btn" type="button" style="margin-top:20px" aria-label="Switch to English">EN</button><button class="theme-txt" type="button" aria-pressed="false">Mörkgrönt läge</button></nav>
+
+<main id="top">
+
+<section class="hero">
+  <video class="hero-bg" src="media/skute-drone-hero.mp4" poster="img/skute-drone-poster.jpg" autoplay muted loop playsinline aria-hidden="true"></video>
+  <div class="hero-shade"></div>
+  <div class="wrap hero-story" id="platsen">
+    <div>
+      <p class="eyebrow">Platsen</p>
+      <p class="rhythm">Landa · Mötas · Fira</p>
+    </div>
+    <div class="hero-story-text">
+      <p>Skutesjön ligger mitt i skogen. Granarna står tätt, marken är mjuk av mossa och stigarna slingrar sig under trädkronorna mellan husen och basturna, ut till gläntorna där eldplatserna ligger. Här och var öppnar sig skogen mot sjön, och en å rinner genom marken året om.</p>
+      <p>Hit kommer människor för att landa. För retreat, yoga, kurser och för att fira – och för ceremonier: kakaoceremonier hålls här ofta, liksom eldceremonier och svetthydda. Vi har byggt platsen med omsorg om det enkla: rent trä, sten, eld och rymd – så att det som händer här får ta plats.</p>
+    </div>
+  </div>
+  <div class="wrap hero-inner">
+    <p class="eyebrow light">Healingcenter · Nordisk natur</p>
+    <h1>Där skogen<br class="h1br"> möter <em>vattnet</em></h1>
+    <p class="lede">Hyr hela Skutesjön för retreat, kurs, ceremoni eller firande. Två bastur, eldplatser under öppen himmel, ett gemenskapshus med kök och yogasal och ett eget sovhus för fyrtio gäster – mitt i skogen.</p>
+    <div class="hero-actions">
+      <a class="btn solid light" href="#hyra">Hyr platsen</a>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+<section class="m3" id="modell">
+  <div class="wrap">
+    <div class="m3-head">
+      <div>
+        <p class="eyebrow">Platsen i 3D</p>
+        <h2 style="margin-top:18px">Gå runt på Skutesjön</h2>
+      </div>
+      <p class="lede">Utforska området, gemenskapshuset och sovhuset i en 3D-modell byggd från bygglovsritningarna. Lyft av taket och se rummen våning för våning.</p>
+    </div>
+    <div class="m3-frame" id="m3">
+      <iframe src="modell.html" title="3D-modell av Skutesjön" loading="lazy" allow="fullscreen"></iframe>
+      <button class="m3-cover" type="button" id="m3Start"><span class="btn solid light">Utforska i 3D</span><small>Dra för att rotera · nyp eller scrolla för att zooma</small></button>
+      <button class="m3-close" type="button" id="m3Stop">Klar</button>
+    </div>
+    <p class="m3-foot"><span>Mått avlästa från ritningar och kan avvika något. Färger och material är antagna.</span><a href="modell.html" target="_blank" rel="noopener">Öppna i helskärm →</a></p>
+  </div>
+</section>
+
+<section class="facilities" id="faciliteter">
+  <div class="wrap">
+    <div class="fac-head">
+      <div>
+        <p class="eyebrow">Faciliteter</p>
+        <h2 style="margin-top:18px">Allt som behövs.<br>Inget som stör.</h2>
+      </div>
+      <p class="lede">Platsen är utformad för grupper som vill vara nära varandra och nära naturen – med bekvämlighet nog att stanna länge.</p>
+    </div>
+    <ul class="fac-list">
+      <li class="reveal">
+        <div><span class="num">Vatten</span><h3>Två bastur &amp; badplats</h3></div>
+        <p>Två bastur – en vedeldad och en eluppvärmd – och bad i sjön från badplatsen. Året om, för morgonbad i sommarljus såväl som vinterdopp i is.</p>
+        <figure class="photo thumb"><img src="img/skute-ca77e08b7f.jpg" alt=""></figure>
+      </li>
+      <li class="reveal">
+        <div><span class="num">Spa</span><h3>Behandlingsrum &amp; aufguss</h3></div>
+        <p>Ett spaliknande utrymme med massagebänk, som öppnar för behandlingar, kroppsterapi och spa-events i anslutning till basturna. Ibland hålls aufguss – bastuceremoni med doft, värme och rörelse.</p>
+        <div class="ph" aria-hidden="true"></div>
+      </li>
+      <li class="reveal">
+        <div><span class="num">Gemenskapshuset</span><h3>Stort kök &amp; luftig yogasal</h3></div>
+        <p>Det stora gemenskapshuset rymmer ett rejält kök för matlagning till hela gruppen och en ljus, luftig yogasal – för rörelse, ceremoni, undervisning och samtal.</p>
+        <div class="ph" aria-hidden="true"></div>
+      </li>
+      <li class="reveal">
+        <div><span class="num">Sovhuset</span><h3>Sovplatser för 40 gäster</h3></div>
+        <p>Ett separat sovhus med plats för cirka fyrtio personer i flerbäddsrum, avskilt från gemenskapshuset så att vila och aktivitet inte konkurrerar. Separat logi för kvinnor och män när så önskas och i den mån det går.</p>
+        <div class="ph" aria-hidden="true"></div>
+      </li>
+      <li class="reveal">
+        <div><span class="num">Eld</span><h3>Flera eldplatser</h3></div>
+        <p>Flera eldplatser spridda över marken, vid vattnet och i skogsbrynet – för samtal, ceremoni och kvällar under stjärnorna. Ved finns alltid.</p>
+        <figure class="photo thumb"><img src="img/skute-eb10eb319f.jpg" alt=""></figure>
+      </li>
+      <li class="reveal">
+        <div><span class="num">Sommar</span><h3>Tipi med eldstad</h3></div>
+        <p>Under sommaren står en stor tipi på ängen, med eldplats inne i mitten. Här kan du elda, samlas i cirkel, hålla ceremoni, musik eller samtal – vad du vill, oavsett väder.</p>
+        <figure class="photo thumb"><img src="img/skute-edd52808b3.jpg" alt=""></figure>
+      </li>
+      <li class="reveal">
+        <div><span class="num">Mark</span><h3>Rinnande vatten &amp; stigar</h3></div>
+        <p>En å rinner genom området och stigar binder samman alla delar. Naturen är närvarande i varje steg.</p>
+        <figure class="photo thumb"><img src="img/skute-b126008eca.jpg" alt=""></figure>
+      </li>
+    </ul>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="hosts" id="om">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Om oss</p>
+      <h2 style="margin-top:18px">Medkänsla och kärlek<br>som utgångspunkt</h2>
+      <div class="measure" style="margin-top:24px;color:var(--ink-soft)">
+        <p>Skutesjön drivs av en organisation med intentionen att inspirera till medkänsla och kärlek. Vår vision är att vara värd för evenemang där alla kan ta del av livets visdom, upplyftande musik och jordens kulturer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="hyra">
+  <div class="wrap">
+    <div class="rent-head">
+      <div>
+        <p class="eyebrow">Hyra platsen</p>
+        <h2 style="margin-top:18px">Du skapar innehållet.<br><em>Vi håller platsen.</em></h2>
+      </div>
+      <p class="lede">Vi hyr ut hela Skutesjön till dig som vill skapa något eget – retreat, kurs, ceremoni, firande eller festival. Du kommer med din grupp och din idé. Vi ser till att allt runtomkring fungerar.</p>
+    </div>
+    <div class="rent-grid">
+      <div class="ph" data-label="Bild kommer · Yogasalen"></div>
+      <div>
+        <p class="eyebrow">Det ingår</p>
+        <div class="incl-acc">
+          <details><summary><b>Boende</b><span class="acc-ic" aria-hidden="true"></span></summary><p>Sovhuset med plats för cirka 40 gäster i flerbäddsrum, avskilt från de gemensamma ytorna. Enkelrum i mån av plats mot tillägg.</p></details>
+          <details><summary><b>Gemenskapshuset</b><span class="acc-ic" aria-hidden="true"></span></summary><p>Stort kök för matlagning till hela gruppen och en ljus, luftig yogasal för rörelse, ceremoni och samtal.</p></details>
+          <details><summary><b>Vatten &amp; eld</b><span class="acc-ic" aria-hidden="true"></span></summary><p>Två bastur – en vedeldad och en eldriven – ett spaliknande behandlingsrum med massagebänk, badplats i sjön, flera eldplatser med ved, och sommartid en stor tipi med eldstad.</p></details>
+        </div>
+        <p class="eyebrow" style="margin-top:44px">Passar för</p>
+        <ul class="uses-chips"><li>Retreat &amp; yoga</li><li>Ceremonier, kakao &amp; cirklar</li><li>Kurser &amp; utbildningar</li><li>Bröllop &amp; firanden</li><li>Spa, bastu &amp; aufguss</li><li>Företagsretreat</li></ul>
+        <p class="uses-note">Hyr platsen för en kväll, en dag, en helg eller en hel vecka – vi formar upplägget efter ert event.</p>
+        <div class="rent-note">Börja med ett samtal. Berätta om din idé, hur många ni är och när ni vill komma, så återkommer vi med ett förslag på upplägg och pris.</div>
+        <div style="margin-top:32px"><a class="btn solid" href="#boka">Fråga om ett eget upplägg</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq-sec" id="boende">
+  <div class="wrap">
+    <div class="faq-head">
+      <div>
+        <p class="eyebrow">Frågor &amp; svar</p>
+        <h2 style="margin-top:18px">Vad behöver du veta<br>för att säga ja?</h2>
+      </div>
+      <p class="lede">Raka svar för dig som ska ansvara för en grupp. Markera det du vill veta mer om, så följer frågan med i ditt mejl.</p>
+    </div>
+    <div class="faq">
+      <details class="faq-item">
+        <summary><span class="faq-q">Var sover alla?</span><span class="acc-ic" aria-hidden="true"></span></summary>
+        <div class="faq-a"><ul><li>I sovhuset, en egen byggnad med plats för ca 40 gäster i flerbäddsrum.</li><li>Separat logi för kvinnor och män om ni önskar, i mån av plats.</li><li>Enkelrum finns i vissa fall, mot tillägg.</li><li>Övernattning före och efter ert event kan bokas.</li></ul><button type="button" class="faq-more" id="faqMore1" aria-pressed="false">Jag vill veta mer</button></div>
+      </details>
+      <details class="faq-item">
+        <summary><span class="faq-q">Hur blir det med maten?</span><span class="acc-ic" aria-hidden="true"></span></summary>
+        <div class="faq-a"><ul><li>Gemenskapshuset har ett stort kök där ni kan laga mat till hela gruppen.</li><li>Maten vi serverar är i största möjliga mån ekologisk, vegetarisk och vegansk, närproducerad och närodlad.</li><li>Måltiderna äts tillsammans. Berätta i mejlet om ni vill laga själva eller ha mat serverad.</li></ul><button type="button" class="faq-more" id="faqMore2" aria-pressed="false">Jag vill veta mer</button></div>
+      </details>
+      <details class="faq-item">
+        <summary><span class="faq-q">Hur tar sig gruppen hit?</span><span class="acc-ic" aria-hidden="true"></span></summary>
+        <div class="faq-a"><ul><li>Tåg eller buss till Kinna. Därifrån hjälper vi till att samordna hämtning för grupper.</li><li>Med bil: parkering vid infarten. Sista biten är grusväg.</li><li>Adress: Skutesjövägen 27, 511 92 Örby.</li></ul><button type="button" class="faq-more" id="faqMore3" aria-pressed="false">Jag vill veta mer</button></div>
+      </details>
+      <details class="faq-item">
+        <summary><span class="faq-q">Vad gör vi om det regnar?</span><span class="acc-ic" aria-hidden="true"></span></summary>
+        <div class="faq-a"><ul><li>Gemenskapshuset har en ljus, luftig yogasal och ett stort kök där hela gruppen kan samlas.</li><li>Två bastur och ett spaliknande behandlingsrum med massagebänk.</li><li>Sommartid står en stor tipi med eldstad i mitten.</li></ul><button type="button" class="faq-more" id="faqMore4" aria-pressed="false">Jag vill veta mer</button></div>
+      </details>
+      <details class="faq-item">
+        <summary><span class="faq-q">Får vi elda och basta?</span><span class="acc-ic" aria-hidden="true"></span></summary>
+        <div class="faq-a"><ul><li>Ja. Det finns flera eldplatser och ved finns alltid.</li><li>Två bastur: en vedeldad och en eldriven. Ibland hålls aufguss.</li><li>Badplats i sjön, året om.</li></ul><button type="button" class="faq-more" id="faqMore5" aria-pressed="false">Jag vill veta mer</button></div>
+      </details>
+      <details class="faq-item">
+        <summary><span class="faq-q">Vad behöver deltagarna ta med?</span><span class="acc-ic" aria-hidden="true"></span></summary>
+        <div class="faq-a"><ul><li>Egna sängkläder och handduk. Det går att hyra om någon inte har med sig.</li><li>Kläder för skog och väder. Stigar binder ihop husen, skogen och sjön.</li></ul><button type="button" class="faq-more" id="faqMore6" aria-pressed="false">Jag vill veta mer</button></div>
+      </details>
+      <details class="faq-item">
+        <summary><span class="faq-q">Hur trygg är miljön?</span><span class="acc-ic" aria-hidden="true"></span></summary>
+        <div class="faq-a"><ul><li>Sammankomsterna är alkohol- och drogfria.</li><li>Vi vill främja gemenskaper som är trygga för alla, med respekt, omtanke och nyfikenhet.</li><li>Värdarna bor här året runt och finns på plats under er vistelse.</li></ul><button type="button" class="faq-more" id="faqMore7" aria-pressed="false">Jag vill veta mer</button></div>
+      </details>
+      <details class="faq-item">
+        <summary><span class="faq-q">Vad kostar det?</span><span class="acc-ic" aria-hidden="true"></span></summary>
+        <div class="faq-a"><ul><li>Pris efter upplägg. Det beror på hur många ni är, hur länge ni stannar och vad ni vill ha med.</li><li>Skriv några rader om er plan, så återkommer vi med förslag på upplägg och pris inom några dagar.</li></ul><button type="button" class="faq-more" id="faqMore8" aria-pressed="false">Jag vill veta mer</button></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="wrap">
+    <p class="closing-text">Kom hit för några dagar.<br><em>Ta med dig stillheten hem.</em></p>
+  </div>
+</section>
+
+<section id="kalender">
+  <div class="wrap">
+    <div class="cal-head">
+      <div>
+        <p class="eyebrow">Kalender</p>
+        <h2 style="margin-top:18px">Event och lediga datum</h2>
+      </div>
+      <p class="lede">Se vad som händer på Skutesjön och vilka datum som är lediga att hyra. Välj ett ledigt datum – eller två för en period – och skicka en förfrågan.</p>
+    </div>
+    <ul class="mc-legend"><li><span class="mc-sw ev"></span>Event</li><li><span class="mc-sw bk"></span>Uthyrt</li><li><span class="mc-sw fr"></span>Ledigt att hyra</li></ul>
+    <div class="mc-bar">
+      <button class="mc-nav" id="mcPrev" type="button" aria-label="Föregående månad">‹</button>
+      <button class="mc-nav" id="mcNext" type="button" aria-label="Nästa månad">›</button>
+    </div>
+    <div class="mc-months" id="mcMonths"></div>
+    <div class="mc-panel" id="mcPanel" aria-live="polite" hidden></div>
+    <h3 class="cal-sub">Kommande event</h3>
+    <ul class="cal" id="calendar"></ul>
+    <p class="cal-foot"><span id="cal-note">Datumen nedan är exempel tills det riktiga programmet är satt. Vill du hyra en period som inte syns här?</span> <a href="#boka">Skicka en förfrågan.</a></p>
+  </div>
+</section>
+
+<section class="mailband" id="boka">
+  <div class="wrap mail-grid">
+    <div class="mail-left">
+      <p class="eyebrow">Kontakt</p>
+      <h2 class="mail-title">Skicka <em>ett mejl.</em></h2>
+      <p class="mail-lead">Det behöver inte vara färdigt. Svara på tre frågor så skriver vi mejlet åt dig. Vi återkommer inom några dagar med förslag på upplägg och pris.</p>
+      <div class="q3">
+        <fieldset class="q"><legend><span class="qn">1</span>Vad vill ni skapa?</legend>
+          <div class="chips" data-key="type"><button type="button" class="chip" aria-pressed="false">Retreat &amp; yoga</button><button type="button" class="chip" aria-pressed="false">Ceremoni &amp; cirkel</button><button type="button" class="chip" aria-pressed="false">Kurs</button><button type="button" class="chip" aria-pressed="false">Bröllop &amp; firande</button><button type="button" class="chip" aria-pressed="false">Spa &amp; bastu</button><button type="button" class="chip" aria-pressed="false">Företagsretreat</button><button type="button" class="chip" aria-pressed="false">Något eget</button></div>
+        </fieldset>
+        <fieldset class="q"><legend><span class="qn">2</span>Hur många är ni?</legend>
+          <div class="chips" data-key="size"><button type="button" class="chip" aria-pressed="false">Under 10</button><button type="button" class="chip" aria-pressed="false">10–20</button><button type="button" class="chip" aria-pressed="false">20–40</button><button type="button" class="chip" aria-pressed="false">Fler än 40</button></div>
+          <p class="q-note" id="qNote40" hidden>Sovhuset rymmer ca 40. Vi löser gärna resten tillsammans.</p>
+        </fieldset>
+        <fieldset class="q"><legend><span class="qn">3</span>När och hur länge?</legend>
+          <div class="chips" data-key="len"><button type="button" class="chip" aria-pressed="false">En kväll</button><button type="button" class="chip" aria-pressed="false">En dag</button><button type="button" class="chip" aria-pressed="false">En helg</button><button type="button" class="chip" aria-pressed="false">En vecka</button></div>
+          <label class="q-field" for="qDates">Datum<input id="qDates" type="text" autocomplete="off" placeholder="t.ex. 6–8 november, eller våren 2027"></label>
+        </fieldset>
+        <label class="q-field" for="qIdea">Er idé med egna ord (valfritt)<textarea id="qIdea" rows="3" placeholder="Vad vill ni göra här?"></textarea></label>
+      </div>
+    </div>
+    <div class="mail-right">
+      <div class="draft" aria-label="Mejlutkast">
+        <dl class="draft-head"><dt>Till</dt><dd>greetskutesjon@gmail.com</dd><dt>Ämne</dt><dd id="draftSubj">Förfrågan – hyra Skutesjön</dd></dl>
+        <pre id="draftBody"></pre>
+        <div class="draft-foot"><span class="draft-status" id="draftStatus" role="status" aria-live="polite"></span><button class="btn-line" id="copyDraft" type="button">Kopiera texten</button></div>
+      </div>
+      <div class="mail-actions">
+        <a class="mail-cta" id="mailBtn" href="mailto:greetskutesjon@gmail.com">Mejla Skutesjön <span aria-hidden="true">→</span></a>
+        <span class="addr"><span class="addr-txt" id="addrTxt">greetskutesjon@gmail.com</span><button class="btn-line light" id="copyAddr" type="button">Kopiera adress</button></span>
+      </div>
+      <p class="mail-help">Öppnas inget mejlprogram? Kopiera texten och klistra in den i ett nytt mejl.</p>
+    </div>
+  </div>
+</section>
+
+<section class="nl-band" id="nyhetsbrev">
+  <div class="wrap nl-band-grid">
+    <div>
+      <p class="eyebrow">Nyhetsbrev</p>
+      <h2 style="margin-top:18px">Det som inte alltid<br>delas öppet</h2>
+    </div>
+    <div>
+      <p class="lede">Retreats, mindre sammankomster, lediga perioder och förhandsbesked om Yggdrasil – en del av det som händer vid Skutesjön går bara ut till dem som står på listan.</p>
+        <form class="newsletter" id="newsletterForm" novalidate>
+        <label for="nl-email">Din e-post</label>
+        <div class="nl-row">
+          <input id="nl-email" name="email" type="email" autocomplete="email" placeholder="din@mejladress.se" required>
+          <button class="btn solid" type="submit">Anmäl dig</button>
+        </div>
+        <small>Datum, retreats, Yggdrasil och lediga perioder – bara när det finns något att berätta.</small>
+        <div class="toast" id="nl-toast" hidden>Tack! Ditt mejlprogram öppnas med anmälan ifylld – skicka så lägger vi till dig.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="find" id="hitta">
+  <div class="wrap find-grid">
+    <div>
+      <p class="eyebrow">Hitta hit</p>
+      <h2 style="margin-top:18px">Vägen till Skutesjön</h2>
+      <p class="lede" style="margin-top:24px">Platsen ligger avskilt men är lätt att nå. Skicka gärna er ankomsttid så möter vi upp vid vägen.</p>
+      <dl>
+        <dt>Adress</dt><dd>Skutesjövägen 27, 511 92 Örby</dd>
+        <dt>Med bil</dt><dd>Parkering finns vid infarten. Sista biten är grusväg.</dd>
+        <dt>Kollektivt</dt><dd>Närmaste station och busshållplats är Kinna. Vi hjälper till att samordna hämtning för grupper.</dd>
+        <dt>Kontakt</dt><dd><a href="mailto:greetskutesjon@gmail.com">greetskutesjon@gmail.com</a></dd>
+      </dl>
+    </div>
+    <div class="map" id="map">
+      <svg class="map-fallback" viewBox="0 0 400 400" fill="none" aria-hidden="true">
+        <rect width="400" height="400" fill="var(--surface-2)"/>
+        <path d="M-20 120c60 20 120 20 180 60s90 110 180 150" stroke="currentColor" stroke-opacity=".28" stroke-dasharray="3 5"/>
+        <path d="M110 250c30-40 60-70 120-80 40-6 70 20 70 55 0 45-40 80-90 78-40-2-80-20-100-53z" fill="currentColor" fill-opacity=".06" stroke="currentColor" stroke-opacity=".28"/>
+        <circle cx="205" cy="215" r="5" fill="var(--moss)"/><circle cx="205" cy="215" r="16" stroke="var(--moss)" stroke-opacity=".5"/>
+        <text x="205" y="260" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="22" fill="currentColor">Skutesjön · Örby</text>
+        <text x="205" y="282" text-anchor="middle" font-family="Manrope, sans-serif" font-size="9" letter-spacing="2" fill="currentColor" fill-opacity=".6">57.489° N · 12.749° E</text>
+      </svg>
+      <a class="map-link" href="https://www.google.com/maps/dir/?api=1&destination=Skutesj%C3%B6v%C3%A4gen+27%2C+511+92+%C3%96rby" target="_blank" rel="noopener">Vägbeskrivning →</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<button class="totop" id="toTop" type="button" aria-label="Till toppen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+<div class="nl-pop" id="nlPop" role="dialog" aria-modal="true" aria-labelledby="nlPopTitle" hidden>
+  <div class="nl-card">
+    <button class="close" type="button" aria-label="Stäng">×</button>
+    <p class="eyebrow">Nyhetsbrev</p>
+    <h3 id="nlPopTitle">Det som inte alltid delas öppet</h3>
+    <p>Retreats, mindre sammankomster, lediga perioder och förhandsbesked om Yggdrasil – en del av det som händer vid Skutesjön går bara ut till dem som står på listan.</p>
+    <form class="newsletter" id="newsletterFormPop" novalidate>
+      <label for="nl-email-pop">Din e-post</label>
+      <div class="nl-row">
+        <input id="nl-email-pop" name="email" type="email" autocomplete="email" placeholder="din@mejladress.se" required>
+        <button class="btn solid" type="submit">Gå med</button>
+      </div>
+      <small>Bara när det finns något att berätta. Avsluta när du vill.</small>
+      <div class="toast" id="nl-toast-pop" hidden>Tack! Ditt mejlprogram öppnas med anmälan ifylld – skicka så lägger vi till dig.</div>
+    </form>
+    <button class="later" type="button">Inte nu</button>
+  </div>
+</div>
+
+<footer class="site">
+  <div class="wrap">
+    <div>
+      <a class="brand" href="#top">Skutesjön</a>
+      <p style="margin-top:8px">Healingcenter · Uthyrning · Yggdrasil-festivalen</p>
+      <p style="margin-top:4px">Skutesjövägen 27, 511 92 Örby</p>
+      <p style="margin-top:6px;max-width:34rem">En organisation med intentionen att inspirera till medkänsla och kärlek.</p>
+    </div>
+    <ul>
+      <li><a href="mailto:greetskutesjon@gmail.com">greetskutesjon@gmail.com</a></li>
+      <li><a href="#hitta">Hitta hit</a></li>
+      <li><a href="#boka">Kontakt</a></li>
+    </ul>
+    <p>© <span id="year"></span> Skutesjön</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Kalender – event hämtas automatiskt från Facebooksidan (/api/events),
+  // privata uthyrningar från bookings.json. Alla andra dagar = ledigt att hyra.
+  // Utan koppling (t.ex. i Claude-förhandsvisningen) visas exempeldata.
+  var EXAMPLES = [
+    {start:'2026-10-10', end:'2026-10-11', title:'Öppen bastuhelg med aufguss', desc:'Bastu, aufguss, bad och eld vid sjön. Drop-in för dig som vill prova platsen.'},
+    {start:'2026-10-24', title:'Kakaoceremoni', desc:'Kväll med kakao, sång och delning vid elden i gemenskapshuset.'},
+    {start:'2026-11-06', end:'2026-11-08', title:'Höstretreat: Stillhet', desc:'Tre dagar med yoga, tystnad och vinterbad. Begränsat antal platser.'},
+    {start:'2026-12-19', title:'Vintersolstånd – ceremoni', desc:'Eldceremoni vid vattnet, bastu och gemensam måltid.'},
+    {start:'2027-06-25', end:'2027-06-27', title:'Yggdrasil 2027', desc:'Årets festival. Musik, ceremoni, bastu och bad under midsommarhimmel.'}
+  ];
+  var EXAMPLE_BOOKINGS = [
+    {from:'2026-10-16', to:'2026-10-18'},
+    {from:'2026-11-20', to:'2026-11-22'},
+    {from:'2026-12-04', to:'2026-12-06'}
+  ];
+  var T = {
+    sv:{months:['januari','februari','mars','april','maj','juni','juli','augusti','september','oktober','november','december'],
+        short:['jan','feb','mar','apr','maj','jun','jul','aug','sep','okt','nov','dec'],
+        wd:['Mån','Tis','Ons','Tor','Fre','Lör','Sön'],
+        free:'Ledigt att hyra', booked:'Uthyrt', fb:'Läs mer & anmäl dig på Facebook →',
+        ask:'Fråga om datumen →', pickEnd:'Välj ett slutdatum om du vill hyra flera dagar.',
+        bookedTxt:'Det här datumet är redan uthyrt. Välj gärna ett annat.',
+        noEvents:'Inga planerade event just nu – anmäl dig till nyhetsbrevet så hör vi av oss.',
+        noteLive:'Eventen uppdateras automatiskt från vår Facebooksida. Vill du hyra en period?',
+        noteEx:'Datumen är exempel tills det riktiga programmet är satt. Vill du hyra en period?'},
+    en:{months:['January','February','March','April','May','June','July','August','September','October','November','December'],
+        short:['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'],
+        wd:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+        free:'Available to rent', booked:'Booked', fb:'Details & sign-up on Facebook →',
+        ask:'Ask about these dates →', pickEnd:'Pick an end date if you want to rent several days.',
+        bookedTxt:'This date is already booked. Please choose another.',
+        noEvents:'No events planned right now – sign up for the newsletter and we’ll let you know.',
+        noteLive:'Events are updated automatically from our Facebook page. Want to rent a period?',
+        noteEx:'The dates are examples until the real programme is set. Want to rent a period?'}
+  };
+  var TAG_EN = {'Öppet':'Open','Ceremoni':'Ceremony','Retreat':'Retreat','Festival':'Festival','Bastu':'Sauna','Kurs':'Course','Yoga':'Yoga','Event':'Event'};
+
+  var ul = document.getElementById('calendar');
+  var note = document.getElementById('cal-note');
+  var monthsEl = document.getElementById('mcMonths');
+  var panel = document.getElementById('mcPanel');
+  var prevBtn = document.getElementById('mcPrev'), nextBtn = document.getElementById('mcNext');
+
+  var events = null, bookings = EXAMPLE_BOOKINGS, isLive = false;
+  var today = new Date(); today.setHours(0,0,0,0);
+  var view = new Date(today.getFullYear(), today.getMonth(), 1);
+  var selA = null, selB = null, shownEvent = null;
+
+  function L(){ return T[document.documentElement.lang === 'en' ? 'en' : 'sv']; }
+  function key(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  function parseDay(str){ var p = str.slice(0,10).split('-'); return new Date(+p[0], p[1]-1, +p[2]); }
+  function perMonth(){ return window.matchMedia('(min-width:900px)').matches ? 2 : 1; }
+
+  function guessTag(t){
+    t = (t||'').toLowerCase();
+    if(/yggdrasil|festival/.test(t)) return ['Festival','festival'];
+    if(/kakao|cacao|ceremoni|ceremony|svetthydd|solstånd|solstand/.test(t)) return ['Ceremoni',''];
+    if(/retreat/.test(t)) return ['Retreat',''];
+    if(/bastu|aufguss|sauna/.test(t)) return ['Bastu','open'];
+    if(/yoga/.test(t)) return ['Yoga',''];
+    if(/kurs|utbildning|workshop|course/.test(t)) return ['Kurs',''];
+    if(/öppen|öppet|open/.test(t)) return ['Öppet','open'];
+    return ['Event',''];
+  }
+
+  // Bygg upp vilka dagar som är upptagna
+  var dayMap = {};
+  function buildMap(){
+    dayMap = {};
+    (events||[]).forEach(function(e){
+      var a = parseDay(e.start), b = e.end ? new Date(e.end) : null;
+      var last = a;
+      if(b){
+        // Kvällsevent som slutar efter midnatt räknas inte som nästa dag
+        var bd = new Date(b.getFullYear(), b.getMonth(), b.getDate());
+        if(e.end.length > 10 && b.getHours() < 6) bd.setDate(bd.getDate()-1);
+        if(bd > a) last = bd;
+      }
+      for(var d = new Date(a); d <= last; d.setDate(d.getDate()+1)){
+        var k = key(d); (dayMap[k] = dayMap[k] || {ev:[]}).ev.push(e);
+      }
+    });
+    (bookings||[]).forEach(function(b){
+      for(var d = parseDay(b.from), end = parseDay(b.to || b.from); d <= end; d.setDate(d.getDate()+1)){
+        var k = key(d); (dayMap[k] = dayMap[k] || {ev:[]}).bk = true;
+      }
+    });
+  }
+
+  function fmt(d, withYear){ var l = L(); return d.getDate()+' '+l.short[d.getMonth()]+(withYear?' '+d.getFullYear():''); }
+
+  function renderMonths(){
+    var l = L(), n = perMonth();
+    monthsEl.innerHTML = '';
+    for(var i = 0; i < n; i++){
+      var m = new Date(view.getFullYear(), view.getMonth()+i, 1);
+      var box = document.createElement('div');
+      var h = document.createElement('p'); h.className = 'mc-title'; h.textContent = l.months[m.getMonth()]+' '+m.getFullYear();
+      var g = document.createElement('div'); g.className = 'mc-grid'; g.setAttribute('role','grid');
+      l.wd.forEach(function(w){ var c = document.createElement('div'); c.className = 'mc-wd'; c.textContent = w; g.appendChild(c); });
+      var offset = (m.getDay()+6)%7;
+      for(var j = 0; j < offset; j++){ var e = document.createElement('div'); e.className = 'mc-day empty'; g.appendChild(e); }
+      var days = new Date(m.getFullYear(), m.getMonth()+1, 0).getDate();
+      for(var dd = 1; dd <= days; dd++){
+        var d = new Date(m.getFullYear(), m.getMonth(), dd), k = key(d), info = dayMap[k];
+        var b = document.createElement('button'); b.type = 'button'; b.className = 'mc-day'; b.textContent = dd; b.dataset.day = k;
+        var label = fmt(d, true) + ' – ';
+        if(d < today){ b.classList.add('past'); b.tabIndex = -1; }
+        if(info && info.ev.length){ b.classList.add('ev'); label += info.ev.map(function(x){return x.title;}).join(', '); }
+        else if(info && info.bk){ b.classList.add('bk'); label += l.booked; }
+        else label += l.free;
+        if(+d === +today) b.classList.add('today');
+        if(inSel(d)) b.classList.add('sel');
+        b.setAttribute('aria-label', label); b.title = label;
+        g.appendChild(b);
+      }
+      box.appendChild(h); box.appendChild(g); monthsEl.appendChild(box);
+    }
+    prevBtn.disabled = view <= new Date(today.getFullYear(), today.getMonth(), 1);
+    nextBtn.disabled = view >= new Date(today.getFullYear()+1, today.getMonth()+6, 1);
+    prevBtn.setAttribute('aria-label', document.documentElement.lang==='en'?'Previous month':'Föregående månad');
+    nextBtn.setAttribute('aria-label', document.documentElement.lang==='en'?'Next month':'Nästa månad');
+  }
+
+  function inSel(d){
+    if(!selA) return false;
+    var a = selA, b = selB || selA; if(b < a){ var t = a; a = b; b = t; }
+    return d >= a && d <= b;
+  }
+  function rangeFree(a, b){
+    if(b < a){ var t = a; a = b; b = t; }
+    for(var d = new Date(a); d <= b; d.setDate(d.getDate()+1)){ var i = dayMap[key(d)]; if(i && (i.bk || i.ev.length)) return false; }
+    return true;
+  }
+
+  function renderPanel(){
+    var l = L(); panel.innerHTML = '';
+    if(shownEvent){
+      var e = shownEvent, a = parseDay(e.start);
+      var div = document.createElement('div');
+      var h = document.createElement('h3'); h.textContent = e.title;
+      var p = document.createElement('p'); p.textContent = fmt(a, true) + (e.desc ? ' · ' + e.desc : '');
+      div.appendChild(h); div.appendChild(p); panel.appendChild(div);
+      if(e.url){ var link = document.createElement('a'); link.className = 'btn'; link.href = e.url; link.target = '_blank'; link.rel = 'noopener'; link.textContent = l.fb; panel.appendChild(link); }
+      panel.hidden = false; return;
+    }
+    if(selA){
+      var x = selA, y = selB || selA; if(y < x){ var t = x; x = y; y = t; }
+      var txt = document.createElement('p');
+      txt.innerHTML = '<b></b><br>';
+      txt.querySelector('b').textContent = (+x === +y ? fmt(x, true) : fmt(x, x.getFullYear()!==y.getFullYear()) + ' – ' + fmt(y, true)) + ' · ' + l.free;
+      if(!selB) txt.appendChild(document.createTextNode(l.pickEnd));
+      panel.appendChild(txt);
+      var btn = document.createElement('a'); btn.className = 'btn solid'; btn.textContent = l.ask;
+      var dTxt = +x === +y ? fmt(x, true) : fmt(x, x.getFullYear()!==y.getFullYear()) + ' – ' + fmt(y, true);
+      btn.href = '#boka';
+      btn.addEventListener('click', function(){ if(window.skuteSetDates) window.skuteSetDates(dTxt); });
+      panel.appendChild(btn); panel.hidden = false; return;
+    }
+    panel.hidden = true;
+  }
+
+  monthsEl.addEventListener('click', function(ev){
+    var b = ev.target.closest('.mc-day'); if(!b || !b.dataset.day) return;
+    var d = parseDay(b.dataset.day), info = dayMap[b.dataset.day], l = L();
+    if(info && info.ev.length){ shownEvent = info.ev[0]; selA = selB = null; }
+    else if(info && info.bk){ shownEvent = null; selA = selB = null; panel.innerHTML = '<p></p>'; panel.firstChild.textContent = l.bookedTxt; panel.hidden = false; renderMonths(); return; }
+    else {
+      shownEvent = null;
+      if(selA && !selB && +d !== +selA && rangeFree(selA, d)) selB = d;
+      else { selA = d; selB = null; }
+    }
+    renderMonths(); renderPanel();
+  });
+  prevBtn.addEventListener('click', function(){ view = new Date(view.getFullYear(), view.getMonth()-1, 1); renderMonths(); });
+  nextBtn.addEventListener('click', function(){ view = new Date(view.getFullYear(), view.getMonth()+1, 1); renderMonths(); });
+  var lastN = perMonth();
+  window.addEventListener('resize', function(){ var n = perMonth(); if(n !== lastN){ lastN = n; renderMonths(); } });
+
+  function renderList(){
+    var l = L(), en = document.documentElement.lang === 'en';
+    ul.innerHTML = '';
+    var list = (events||[]).filter(function(e){ return parseDay(e.end || e.start) >= today; });
+    if(!list.length){
+      var empty = document.createElement('li'); empty.innerHTML = '<div></div><div><p></p></div>';
+      empty.querySelector('p').textContent = l.noEvents; ul.appendChild(empty);
+    }
+    list.forEach(function(e){
+      var g = guessTag(e.title), dt = parseDay(e.start);
+      var li = document.createElement('li');
+      li.innerHTML = '<div class="date"><b>' + dt.getDate() + '</b><span>' + l.short[dt.getMonth()] + ' ' + dt.getFullYear() + '</span></div>' +
+        '<div><h3></h3><p></p></div><span class="tag ' + g[1] + '"></span>';
+      li.querySelector('h3').textContent = e.title;
+      li.querySelector('p').textContent = e.desc || '';
+      li.querySelector('.tag').textContent = en ? (TAG_EN[g[0]]||g[0]) : g[0];
+      if(e.url){
+        var a = document.createElement('a'); a.className = 'cal-link'; a.href = e.url; a.target = '_blank'; a.rel = 'noopener';
+        a.textContent = l.fb; li.children[1].appendChild(a);
+      }
+      ul.appendChild(li);
+    });
+    if(note) note.textContent = isLive ? l.noteLive : l.noteEx;
+  }
+
+  function renderAll(){ buildMap(); renderMonths(); renderList(); renderPanel(); }
+  events = EXAMPLES;
+  renderAll();
+  new MutationObserver(function(){ renderMonths(); renderList(); renderPanel(); })
+    .observe(document.documentElement, {attributes:true, attributeFilter:['lang']});
+
+  if(window.fetch && /^https?:$/.test(location.protocol)){
+    var getJSON = function(u){ return fetch(u, {headers:{accept:'application/json'}}).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }); };
+    Promise.all([getJSON('/api/events'), getJSON('bookings.json')]).then(function(res){
+      var fb = res[0], bk = res[1];
+      if(fb && Array.isArray(fb.events) && fb.source === 'facebook'){
+        isLive = true; events = fb.events;
+        bookings = (bk && Array.isArray(bk.bookings)) ? bk.bookings : [];
+        renderAll();
+      }
+    });
+  }
+
+  // Kontakt: tre frågor + frågor & svar → mejlutkast
+  (function(){
+    var ADDR = 'greetskutesjon@gmail.com';
+    var root = document.documentElement;
+    var en = function(){ return root.lang === 'en'; };
+    var sel = {type:null,size:null,len:null};
+    var body = document.getElementById('draftBody'), subjEl = document.getElementById('draftSubj');
+    var mailBtn = document.getElementById('mailBtn'), dates = document.getElementById('qDates'), idea = document.getElementById('qIdea');
+    var note40 = document.getElementById('qNote40');
+    var faqItems = [].slice.call(document.querySelectorAll('.faq-item'));
+    function txt(b){ return b ? b.textContent.trim() : ''; }
+    function build(){
+      var E = en();
+      var subj = E ? 'Enquiry – renting Skutesjön' : 'Förfrågan – hyra Skutesjön';
+      var marked = faqItems.filter(function(d){ return d.classList.contains('marked'); }).map(function(d){ return '– ' + d.querySelector('.faq-q').textContent.trim(); });
+      var L = E ? ['Hi Skutesjön!','What we want to create: ','Number of people: ','Length: ','Dates: ','Our idea / plan:','I would like to know more about:','Kind regards']
+                : ['Hej Skutesjön!','Vad vi vill skapa: ','Antal personer: ','Längd: ','Datum: ','Vår idé / plan:','Jag vill veta mer om:','Vänliga hälsningar'];
+      var t = L[0] + '\n\n' + L[1] + txt(sel.type) + '\n' + L[2] + txt(sel.size) + '\n' + L[3] + txt(sel.len) + '\n' + L[4] + dates.value.trim() + '\n\n' + L[5] + '\n' + (idea.value.trim() || '') + '\n\n';
+      if(marked.length) t += L[6] + '\n' + marked.join('\n') + '\n\n';
+      t += L[7] + '\n';
+      body.textContent = t; subjEl.textContent = subj;
+      mailBtn.href = 'mailto:' + ADDR + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(t);
+      return {subj:subj, t:t};
+    }
+    document.querySelectorAll('.mailband .chips').forEach(function(g){
+      g.addEventListener('click', function(ev){
+        var b = ev.target.closest('.chip'); if(!b) return;
+        var k = g.dataset.key, on = b.getAttribute('aria-pressed') !== 'true';
+        g.querySelectorAll('.chip').forEach(function(c){ c.setAttribute('aria-pressed','false'); });
+        if(on) b.setAttribute('aria-pressed','true');
+        sel[k] = on ? b : null;
+        if(k === 'size') note40.hidden = !(on && b === g.lastElementChild);
+        build();
+      });
+    });
+    dates.addEventListener('input', build); idea.addEventListener('input', build);
+    function moreLabel(btn){ var on = btn.getAttribute('aria-pressed') === 'true';
+      btn.textContent = on ? (en() ? '✓ Added to your email' : '✓ Med i ditt mejl') : (en() ? 'I want to know more' : 'Jag vill veta mer'); }
+    faqItems.forEach(function(d){
+      var btn = d.querySelector('.faq-more');
+      btn.addEventListener('click', function(){
+        var on = btn.getAttribute('aria-pressed') !== 'true';
+        btn.setAttribute('aria-pressed', on); d.classList.toggle('marked', on); moreLabel(btn); build();
+      });
+    });
+    function copy(text, el, okMsg){
+      var st = document.getElementById('draftStatus');
+      function fallback(){ var r = document.createRange(); r.selectNodeContents(el); var s2 = getSelection(); s2.removeAllRanges(); s2.addRange(r);
+        if(st) st.textContent = en() ? 'Selected – press Ctrl/Cmd+C' : 'Markerad – tryck Ctrl/Cmd+C'; }
+      try{ navigator.clipboard.writeText(text).then(function(){ if(st) st.textContent = okMsg; setTimeout(function(){ if(st) st.textContent=''; }, 2500); }, fallback); }catch(e){ fallback(); }
+    }
+    document.getElementById('copyDraft').addEventListener('click', function(){ var d = build(); copy((en()?'To: ':'Till: ') + ADDR + '\n' + (en()?'Subject: ':'Ämne: ') + d.subj + '\n\n' + d.t, body, en() ? 'The text is copied' : 'Texten är kopierad'); });
+    document.getElementById('copyAddr').addEventListener('click', function(){ copy(ADDR, document.getElementById('addrTxt'), en() ? 'Address copied' : 'Adressen är kopierad'); });
+    mailBtn.addEventListener('click', build);
+    window.skuteSetDates = function(d){ dates.value = d; build(); };
+    new MutationObserver(function(){ document.querySelectorAll('.faq-more').forEach(moreLabel); build(); }).observe(root, {attributes:true, attributeFilter:['lang']});
+    build();
+  })();
+
+})();
+</script>
+<script>
+(function(){var f=document.getElementById('m3');if(!f)return;
+document.getElementById('m3Start').addEventListener('click',function(){f.classList.add('active');var i=f.querySelector('iframe');try{i.focus();}catch(e){}});
+document.getElementById('m3Stop').addEventListener('click',function(){f.classList.remove('active');});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')f.classList.remove('active');});
+})();
+</script>
+<script>
+(function(){var root=document.documentElement;
+function lbl(dark){var en=root.lang==='en';return dark?(en?'Light mode':'Ljust läge'):(en?'Dark green mode':'Mörkgrönt läge');}
+function set(dark){if(dark)root.setAttribute('data-theme','dark');else root.removeAttribute('data-theme');
+document.querySelectorAll('.theme-btn').forEach(function(b){b.setAttribute('aria-pressed',dark);b.setAttribute('aria-label',dark?(root.lang==='en'?'Switch to light mode':'Byt till ljust tema'):(root.lang==='en'?'Switch to dark green mode':'Byt till mörkgrönt tema'));});
+document.querySelectorAll('.theme-txt').forEach(function(b){b.setAttribute('aria-pressed',dark);b.textContent=lbl(dark);});
+try{localStorage.setItem('skute-theme',dark?'dark':'light');}catch(e){}}
+document.querySelectorAll('.theme-btn,.theme-txt').forEach(function(b){b.addEventListener('click',function(){set(root.getAttribute('data-theme')!=='dark');});});
+new MutationObserver(function(){set(root.getAttribute('data-theme')==='dark');}).observe(root,{attributes:true,attributeFilter:['lang']});
+var t='light';try{t=localStorage.getItem('skute-theme')||'light';}catch(e){}set(t==='dark');})();
+</script>
+<script>
+(function(){var b=document.getElementById('menuBtn'),n=document.getElementById('mobileNav');if(!b||!n)return;
+function set(o){n.classList.toggle('open',o);document.body.classList.toggle('nav-open',o);b.setAttribute('aria-expanded',o);}
+b.addEventListener('click',function(){set(!n.classList.contains('open'));});
+n.querySelectorAll('a,button').forEach(function(a){a.addEventListener('click',function(){set(false);});});
+})();
+</script>
+<script>
+(function(){
+var EN={"Platsen": "The place", "Hyra": "Rent", "Kalender": "Calendar", "Hitta hit": "Find us", "Kontakt": "Contact", "Faciliteter": "Facilities", "Hyra platsen": "Rent the place", "Om oss": "About us", "Festivalen": "The festival", "Program": "Programme", "Praktiskt": "Practical", "Bilder": "Photos", "Biljetter": "Tickets", "← Skutesjön": "← Skutesjön", "Där skogen": "Where the forest", "möter": "meets", "vattnet": "the water", "Hyr hela Skutesjön för retreat, kurs, ceremoni eller firande. Två bastur, eldplatser under öppen himmel, ett gemenskapshus med kök och yogasal och ett eget sovhus för fyrtio gäster – mitt i skogen.": "Rent all of Skutesjön for a retreat, course, ceremony or celebration. Two saunas, fire pits under the open sky, a community house with kitchen and yoga hall, and a separate sleeping house for forty guests – deep in the forest.", "Hyr platsen": "Rent the place", "Yggdrasil-festivalen": "The Yggdrasil festival", "sovplatser": "beds", "bastur – ved & el": "saunas – wood & electric", "hus – gemenskap & sovhus": "houses – community & sleeping", "Flera": "Several", "eldplatser & badplats": "fire pits & swimming spot", "Landa · Mötas · Fira": "Land · Meet · Celebrate", "Det första man hör är vattnet. Sedan vinden i granarna.": "The first thing you hear is the water. Then the wind in the spruces.", "Sedan ingenting alls.": "Then nothing at all.", "Skutesjön ligger mitt i skogen. Granarna står tätt, marken är mjuk av mossa och stigarna slingrar sig under trädkronorna mellan husen och basturna, ut till gläntorna där eldplatserna ligger. Här och var öppnar sig skogen mot sjön, och en å rinner genom marken året om.": "Skutesjön lies in the middle of the forest. The spruces stand close, the ground is soft with moss, and the paths wind beneath the canopy between the houses and the saunas, out to the clearings where the fire pits are. Here and there the forest opens towards the lake, and a river runs through the land all year round.", "Hit kommer människor för att landa. För retreat, yoga, kurser och för att fira – och för ceremonier: kakaoceremonier hålls här ofta, liksom eldceremonier och svetthydda. Vi har byggt platsen med omsorg om det enkla: rent trä, sten, eld och rymd – så att det som händer här får ta plats.": "People come here to land. For retreats, yoga, courses and celebrations – and for ceremonies: cacao ceremonies are held here often, as are fire ceremonies and sweat lodge. We have built the place with care for the simple things: bare wood, stone, fire and space – so that what happens here has room to happen.", "Tre sätt att komma hit": "Three ways to come here", "För arrangörer": "For organisers", "Håll ditt eget event": "Host your own event", "Retreat, kurs, ceremoni eller festival. Du skapar innehållet – vi håller platsen, husen, basturna, tipin och elden redo.": "Retreat, course, ceremony or festival. You create the content – we keep the place, the houses, the saunas, the tipi and the fire ready.", "Hyra platsen →": "Rent the place →", "För deltagare": "For participants", "Kom och landa": "Come and land", "Öppna helger, ceremonier, retreat och Yggdrasil-festivalen. Kom ensam eller med någon – och ta med dig stillheten hem.": "Open weekends, ceremonies, retreats and the Yggdrasil festival. Come alone or with someone – and take the stillness home with you.", "Se kalendern →": "See the calendar →", "För livets stunder": "For life's moments", "Fira livet": "Celebrate life", "Bröllop, födelsedagar, minnesstunder och välsignelser – vid vattnet, runt elden och under stjärnorna.": "Weddings, birthdays, memorials and blessings – by the water, around the fire and under the stars.", "Hör av dig →": "Get in touch →", "Allt som behövs.": "Everything you need.", "Inget som stör.": "Nothing that disturbs.", "Platsen är utformad för grupper som vill vara nära varandra och nära naturen – med bekvämlighet nog att stanna länge.": "The place is made for groups who want to be close to each other and close to nature – with enough comfort to stay a while.", "Vatten": "Water", "Två bastur & badplats": "Two saunas & swimming spot", "Två bastur – en vedeldad och en eluppvärmd – och bad i sjön från badplatsen. Året om, för morgonbad i sommarljus såväl som vinterdopp i is.": "Two saunas – one wood-fired, one electric – and swimming in the lake from the bathing spot. All year round, for morning swims in summer light as well as winter dips through the ice.", "Spa": "Spa", "Behandlingsrum & aufguss": "Treatment room & aufguss", "Ett spaliknande utrymme med massagebänk, som öppnar för behandlingar, kroppsterapi och spa-events i anslutning till basturna. Ibland hålls aufguss – bastuceremoni med doft, värme och rörelse.": "A spa-like space with a massage table, open for treatments, bodywork and spa events next to the saunas. Aufguss is held here from time to time – a sauna ceremony of scent, heat and movement.", "Gemenskapshuset": "The community house", "Stort kök & luftig yogasal": "Large kitchen & airy yoga hall", "Det stora gemenskapshuset rymmer ett rejält kök för matlagning till hela gruppen och en ljus, luftig yogasal – för rörelse, ceremoni, undervisning och samtal.": "The large community house holds a proper kitchen for cooking for the whole group and a bright, airy yoga hall – for movement, ceremony, teaching and conversation.", "Sovhuset": "The sleeping house", "Sovplatser för 40 gäster": "Beds for 40 guests", "Ett separat sovhus med plats för cirka fyrtio personer, avskilt från gemenskapshuset så att vila och aktivitet inte konkurrerar.": "A separate sleeping house for around forty people, set apart from the community house so that rest and activity never compete.", "Eld": "Fire", "Flera eldplatser": "Several fire pits", "Flera eldplatser spridda över marken, vid vattnet och i skogsbrynet – för samtal, ceremoni och kvällar under stjärnorna. Ved finns alltid.": "Several fire pits spread across the land, by the water and at the forest edge – for conversation, ceremony and evenings under the stars. There is always firewood.", "Sommar": "Summer", "Tipi med eldstad": "Tipi with a fireplace", "Under sommaren står en stor tipi på ängen, med eldplats inne i mitten. Här kan du elda, samlas i cirkel, hålla ceremoni, musik eller samtal – vad du vill, oavsett väder.": "In summer a large tipi stands in the meadow, with a fireplace at its centre. Here you can make fire, gather in a circle, hold ceremony, music or conversation – whatever you like, whatever the weather.", "Mark": "Land", "Rinnande vatten & stigar": "Running water & paths", "En å rinner genom området och stigar binder samman alla delar. Naturen är närvarande i varje steg.": "A river runs through the grounds and paths tie every part together. Nature is present in every step.", "Vattnet rinner året om.": "The water runs all year round.", "Det är därför vi är här.": "That is why we are here.", "Festival · Varje år": "Festival · Every year", "festivalen vid Skutesjön": "the festival at Skutesjön", "Yoga, livemusik, dans, meditation, ceremonier och inspirerande workshops med fokus på holistisk hälsa och gemenskap. En gång om året växer Yggdrasil fram ur platsen – med svetthydda, eld och bad, och kulturella sammanhang där visdom delas mellan unga och äldre.": "Yoga, live music, dance, meditation, ceremonies and inspiring workshops focused on holistic health and community. Once a year Yggdrasil grows out of the place – with sweat lodge, fire and swimming, and cultural gatherings where wisdom is shared between young and old.", "Årligen": "Yearly", "vid Skutesjön": "at Skutesjön", "3 dagar": "3 days", "yoga, musik, workshops & ceremoni": "yoga, music, workshops & ceremony", "Boende": "Lodging", "sovhus eller tält": "sleeping house or tent", "Till festivalens sida": "To the festival page", "Yggdrasil 2026": "Yggdrasil 2026", "Fler bilder": "More photos", "Kommande händelser": "Upcoming events", "Öppna helger, retreat och festivalen. Lediga perioder däremellan går att hyra.": "Open weekends, retreats and the festival. Free periods in between are available to rent.", "okt 2026": "Oct 2026", "nov 2026": "Nov 2026", "dec 2026": "Dec 2026", "feb 2027": "Feb 2027", "jun 2027": "Jun 2027", "Öppen bastuhelg med aufguss": "Open sauna weekend with aufguss", "Bastu, aufguss, bad och eld vid sjön. Drop-in för dig som vill prova platsen.": "Sauna, aufguss, swimming and fire by the lake. Drop in and get to know the place.", "Öppet": "Open", "Kakaoceremoni": "Cacao ceremony", "Kväll med kakao, sång och delning vid elden i gemenskapshuset.": "An evening of cacao, song and sharing by the fire in the community house.", "Ceremoni": "Ceremony", "Höstretreat: Stillhet": "Autumn retreat: Stillness", "Tre dagar med yoga, tystnad och vinterbad. Begränsat antal platser.": "Three days of yoga, silence and cold-water swimming. Limited places.", "Retreat": "Retreat", "Vintersolstånd – ceremoni": "Winter solstice – ceremony", "Eldceremoni vid vattnet, bastu och gemensam måltid.": "Fire ceremony by the water, sauna and a shared meal.", "Ledig period för uthyrning": "Free period for rental", "Hela platsen ledig 12–21 februari. Passar retreat eller kurs.": "The whole place is free 12–21 February. Suits a retreat or course.", "Ledigt": "Available", "Yggdrasil 2027": "Yggdrasil 2027", "Årets festival. Musik, ceremoni, bastu och bad under midsommarhimmel.": "This year's festival. Music, ceremony, sauna and swimming under the midsummer sky.", "Festival": "Festival", "Datumen nedan är exempel tills det riktiga programmet är satt. Vill du hyra en period som inte syns här?": "The dates below are examples until the real programme is set. Want to rent a period not shown here?", "Skicka en förfrågan.": "Send an enquiry.", "Medkänsla och kärlek": "Compassion and love", "som utgångspunkt": "as our starting point", "Skutesjön drivs av en organisation med intentionen att inspirera till medkänsla och kärlek. Vår vision är att vara värd för evenemang där alla kan ta del av livets visdom, upplyftande musik och jordens kulturer.": "Skutesjön is run by an organisation whose intention is to inspire compassion and love. Our vision is to host events where everyone can take part in the wisdom of life, uplifting music and the cultures of the earth.", "Vi bor och verkar här året runt och finns med som värdar under din vistelse: tänder bastun, visar stigarna och hjälper till med det praktiska, så att du kan fokusera på det du kommit hit för.": "We live and work here all year round and are present as hosts during your stay: lighting the sauna, showing the paths and helping with the practical things, so you can focus on what you came for.", "”En plats där alla kan ta del av livets visdom, upplyftande musik och jordens kulturer.”": "“A place where everyone can take part in the wisdom of life, uplifting music and the cultures of the earth.”", "Vår vision": "Our vision", "Vägen till Skutesjön": "The way to Skutesjön", "Platsen ligger avskilt men är lätt att nå. Skicka gärna er ankomsttid så möter vi upp vid vägen.": "The place is secluded but easy to reach. Send us your arrival time and we will meet you at the road.", "Adress": "Address", "Skutesjön · adress kommer": "Skutesjön · address coming", "Med bil": "By car", "Parkering finns vid infarten. Sista biten är grusväg.": "Parking at the entrance. The last stretch is a gravel road.", "Kollektivt": "Public transport", "Närmaste station och busshållplats kompletteras. Vi hjälper till att samordna hämtning för grupper.": "Nearest station and bus stop to be added. We help coordinate pick-ups for groups.", "Du skapar innehållet.": "You create the content.", "Vi håller platsen.": "We hold the place.", "Vi hyr ut hela Skutesjön till dig som vill skapa något eget – retreat, kurs, ceremoni, firande eller festival. Du kommer med din grupp och din idé. Vi ser till att allt runtomkring fungerar.": "We rent out the whole of Skutesjön to you who want to create something of your own – a retreat, course, ceremony, celebration or festival. You bring your group and your idea. We make sure everything around it works.", "Det ingår": "What's included", "Sovhuset med plats för cirka 40 gäster, avskilt från de gemensamma ytorna.": "The sleeping house for around 40 guests, set apart from the shared spaces.", "Stort kök för matlagning till hela gruppen och en ljus, luftig yogasal för rörelse, ceremoni och samtal.": "A large kitchen for cooking for the whole group and a bright, airy yoga hall for movement, ceremony and conversation.", "Vatten & eld": "Water & fire", "Två bastur – en vedeldad och en eldriven – ett spaliknande behandlingsrum med massagebänk, badplats i sjön, flera eldplatser med ved, och sommartid en stor tipi med eldstad.": "Two saunas – one wood-fired, one electric – a spa-like treatment room with a massage table, a swimming spot in the lake, several fire pits with firewood, and in summer a large tipi with a fireplace.", "Värdskap": "Hosting", "Vi finns på plats: tänder bastun, visar stigarna och hjälper till med det praktiska så att du kan fokusera på din grupp.": "We are on site: lighting the sauna, showing the paths and helping with the practical things so you can focus on your group.", "Passar för": "Suited for", "Retreat & yoga": "Retreat & yoga", "Helg eller vecka": "Weekend or week", "Ceremonier, kakao & cirklar": "Ceremonies, cacao & circles", "Dag eller helg": "Day or weekend", "Kurser & utbildningar": "Courses & trainings", "Flerdagars": "Several days", "Bröllop & firanden": "Weddings & celebrations", "Helg": "Weekend", "Spa, bastu & aufguss": "Spa, sauna & aufguss", "Dag eller kväll": "Day or evening", "Företagsretreat": "Company retreat", "2–4 dagar": "2–4 days", "Börja med ett samtal. Berätta om din idé, hur många ni är och när ni vill komma, så återkommer vi med ett förslag på upplägg och pris.": "Start with a conversation. Tell us about your idea, how many you are and when you would like to come, and we will get back to you with a proposal and a price.", "Fråga om ett eget upplägg": "Ask about a custom setup", "Kom hit för några dagar.": "Come here for a few days.", "Ta med dig stillheten hem.": "Take the stillness home with you.", "Hör av dig": "Get in touch", "Allmän fråga": "General question", "Retreat / yoga": "Retreat / yoga", "Spa / bastu / aufguss": "Spa / sauna / aufguss", "Ceremoni / cirkel": "Ceremony / circle", "Kurs / utbildning": "Course / training", "Bröllop / firande": "Wedding / celebration", "Annat": "Other", "DL::Bild kommer · Värdarna": "DL::Photo coming · The hosts", "DL::Karta kommer": "DL::Map coming", "DL::Bild kommer · Yogasalen": "DL::Photo coming · The yoga hall", "Healingcenter · Uthyrning · Yggdrasil-festivalen": "Healing centre · Rentals · The Yggdrasil festival", "En organisation med intentionen att inspirera till medkänsla och kärlek.": "An organisation whose intention is to inspire compassion and love.", "Festival · Skutesjön · Varje sommar": "Festival · Skutesjön · Every summer", "Festivalen 2026": "The festival 2026", "Yoga, livemusik, dans, meditation, ceremonier och inspirerande workshops med fokus på holistisk hälsa och gemenskap. Några sommardagar vid sjön där vi möts bortom gränser och roller – precis som vi är.": "Yoga, live music, dance, meditation, ceremonies and inspiring workshops focused on holistic health and community. A few summer days by the lake where we meet beyond borders and roles – just as we are.", "Om festivalen": "About the festival", "Det sägs att det mytomspunna världsträdet Yggdrasils knotiga grenar och rötter binder samman det som varit, det som är och det som gror. En brygga mellan de nio världarna där människor och andra varelser samlas för att dela berättelser, skapa tillsammans och minnas att vi hör ihop": "It is said that the gnarled branches and roots of the mythical world tree Yggdrasil bind together what has been, what is and what is growing. A bridge between the nine worlds where people and other beings gather to share stories, create together and remember that we belong to one another", "Välkommen": "Welcome", "En varm, levande och familjevänlig festival": "A warm, living and family-friendly festival", "Yggdrasil är en festival där gemenskap, natur och livsglädje står i centrum. Under några sommardagar skapar vi tillsammans en egen värld där vi möts bortom gränser och roller, precis som vi är.": "Yggdrasil is a festival where community, nature and the joy of life are at the centre. Over a few summer days we create a world of our own together, where we meet beyond borders and roles, just as we are.", "Här fylls dagarna av inspirerande workshops, rörelse, musik och skapande. Du kan delta i yoga, dans, utvecklingscirklar, växtkunskap och kreativa uttryck i olika former. Musik och rytmer från olika håll i världen vävs samman med skratt, lek och stunder i naturen.": "The days are filled with inspiring workshops, movement, music and creativity. You can take part in yoga, dance, growth circles, plant knowledge and creative expression in many forms. Music and rhythms from around the world are woven together with laughter, play and moments in nature.", "På festivalen hjälps vi åt, äter tillsammans och tar hand om varandra och platsen vi vistas på – samtidigt som vi tar del av det spännande programmet.": "At the festival we help each other, eat together and take care of one another and the place we are in – while enjoying the exciting programme.", "Festivalen är helt alkohol- och drogfri": "The festival is completely alcohol- and drug-free", ", och en trygg plats för både stora och små, där även barnen är en naturlig del av gemenskapen.": ", and a safe place for young and old, where children too are a natural part of the community.", "Vid elden, i skogen och i mötena med varandra påminns vi om något enkelt men viktigt: att en annan sorts vardag är möjlig. En där balans, omtanke och glädje ligger som grund.": "By the fire, in the forest and in meeting one another we are reminded of something simple but important: that another kind of everyday life is possible. One built on balance, care and joy.", "Yggdrasil 2026 bjuder in oss att känna magin när vi samlas, firar livet och sår frön för en mer levande nutid och framtid – tillsammans.": "Yggdrasil 2026 invites us to feel the magic as we gather, celebrate life and sow seeds for a more alive present and future – together.", "Programmet": "The programme", "Dagar fyllda av rörelse,": "Days full of movement,", "musik och skapande": "music and creativity", "Yoga & meditation": "Yoga & meditation", "Morgonpass vid sjön och stilla stunder under dagen, för alla nivåer.": "Morning sessions by the lake and quiet moments during the day, for all levels.", "Livemusik & dans": "Live music & dance", "Musik och rytmer från olika håll i världen – konserter i tältet och dans in i sommarnatten.": "Music and rhythms from around the world – concerts in the tent and dancing into the summer night.", "Workshops": "Workshops", "Inspirerande workshops med fokus på holistisk hälsa, gemenskap och kreativa uttryck.": "Inspiring workshops focused on holistic health, community and creative expression.", "Utvecklingscirklar": "Growth circles", "Samtal och delning i cirkel, där visdom delas mellan unga och äldre.": "Conversation and sharing in circle, where wisdom passes between young and old.", "Ceremonier, kakao & svetthydda": "Ceremonies, cacao & sweat lodge", "Eldceremonier, kakaoceremonier, svetthydda och kulturella sammanhang som knyter oss till platsen och varandra.": "Fire ceremonies, cacao ceremonies, sweat lodge and cultural gatherings that bind us to the place and to each other.", "Växtkunskap, hantverk & natur": "Plant knowledge, crafts & nature", "Vandringar, växtkunskap, hantverk med det skogen ger, bad i sjön och lek – för stora och små.": "Walks, plant knowledge, crafts with what the forest gives, swimming in the lake and play – for young and old.", "Bra att veta": "Good to know", "I biljettpriset ingår": "The ticket price includes", "camping och två mumsiga mål mat om dagen, tillagade med kärlek och råvaror från lokala bönder – vegetariskt/veganskt och glutenfritt.": "camping and two delicious meals a day, cooked with love from local farmers' produce – vegetarian/vegan and gluten-free.", "Camping": "Camping", "Ingår": "Included", "Café med snacks, drycker och kaffe": "Café with snacks, drinks and coffee", "På området": "On site", "En härlig sjö att svalka sig i": "A lovely lake to cool off in", "Bad": "Swimming", "Dricksvatten": "Drinking water", "Kalldusch": "Cold shower", "Ta med miljövänlig tvål": "Bring eco-friendly soap", "Toalett": "Toilets", "Alkohol- och drogfri festival": "Alcohol- and drug-free festival", "Alltid": "Always", "Barn är varmt välkomna": "Children are warmly welcome", "Familjevänligt": "Family-friendly", "Sommaren som var": "The summer that was", "Svetthydda, runor, hantverk, musik och dans – och alla möten däremellan.": "Sweat lodge, runes, crafts, music and dance – and all the meetings in between.", "Yggdrasil 2025": "Yggdrasil 2025", "Och året innan": "And the year before", "Möten, musik, eld och långsamma samtal där generationer möts.": "Meetings, music, fire and slow conversations where generations meet.", "Kom och var med": "Come and join us", "i sommar": "this summer", "Datum och biljettsläpp för Yggdrasil 2026 meddelas här. Anmäl ditt intresse så hör vi av oss först av alla.": "Dates and ticket release for Yggdrasil 2026 will be announced here. Register your interest and you will hear from us first.", "Intresseanmälan": "Register interest", "Om platsen Skutesjön": "About the place Skutesjön", "En festival vid Skutesjön · Varje sommar": "A festival at Skutesjön · Every summer", "Skutesjön är en organisation med intentionen att inspirera till medkänsla och kärlek – värd för evenemang där alla kan ta del av livets visdom, upplyftande musik och jordens kulturer.": "Skutesjön is an organisation whose intention is to inspire compassion and love – host to events where everyone can take part in the wisdom of life, uplifting music and the cultures of the earth.", "Festivalen 2027": "The festival 2027", "Yggdrasil 2027 bjuder in oss att känna magin när vi samlas, firar livet och sår frön för en mer levande nutid och framtid – tillsammans.": "Yggdrasil 2027 invites us to feel the magic as we gather, celebrate life and sow seeds for a more alive present and future – together.", "sommaren 2027": "in summer 2027", "Datum och biljettsläpp för Yggdrasil 2027 meddelas här. Vill du få besked först av alla – anmäl dig till vårt nyhetsbrev.": "Dates and ticket release for Yggdrasil 2027 will be announced here. Want to be the first to know – sign up for our newsletter.", "Nyhetsbrev": "Newsletter", "Anmäl dig": "Sign up", "PH::din@mejladress.se": "PH::your@email.com", "Vi skickar bara när det finns något att berätta – datum, biljetter och program.": "We only send when there is something to tell – dates, tickets and programme.", "Tack! Ditt mejlprogram öppnas med anmälan ifylld – skicka så lägger vi till dig.": "Thank you! Your email app will open with the sign-up filled in – send it and we will add you.", "Närmaste station och busshållplats är Kinna. Vi hjälper till att samordna hämtning för grupper.": "The nearest train station and bus stop is Kinna. We help coordinate pick-ups for groups.", "Öppna i kartor": "Open in maps", "Vägbeskrivning →": "Directions →", "Det som inte alltid delas öppet": "What isn't always shared openly", "Din e-post": "Your email", "Gå med": "Join", "Bara när det finns något att berätta. Avsluta när du vill.": "Only when there is something to tell. Leave whenever you like.", "Inte nu": "Not now", "Ett separat sovhus med plats för cirka fyrtio personer i flerbäddsrum, avskilt från gemenskapshuset så att vila och aktivitet inte konkurrerar. Separat logi för kvinnor och män när så önskas och i den mån det går.": "A separate sleeping house for around forty people in shared rooms, set apart from the community house so that rest and activity never compete. Separate lodging for women and men when wished and as far as possible.", "Boende, mat": "Lodging, food", "och omtanke": "and care", "Skutesjön är en plats för trygga sammanhang. Vi håller det enkelt, delar på det vi har och tar hand om varandra och marken vi vistas på.": "Skutesjön is a place for safe gatherings. We keep it simple, share what we have and take care of each other and the land we are on.", "Boende sker i flerbäddsrum, med separat logi för kvinnor och män om så önskas och i den mån det går.": "Accommodation is in shared rooms, with separate lodging for women and men if wished and as far as possible.", "Önskar du enkelrum kan detta i vissa fall erbjudas i mån av plats, mot ett tillägg – kontakta oss gärna i god tid så ser vi vad som är möjligt. Det går också att boka övernattning före eller efter retreats och events.": "If you would like a single room, this can in some cases be offered subject to availability, for an extra charge – contact us well in advance and we will see what is possible. You can also book a night before or after retreats and events.", "Mat": "Food", "Vi serverar i största möjliga mån ekologisk, vegetarisk och vegansk mat, med fokus på närproducerat och närodlat. Måltiderna lagas i gemenskapshusets kök och äts tillsammans.": "As far as possible we serve organic, vegetarian and vegan food, with a focus on locally produced and locally grown. Meals are cooked in the community house kitchen and eaten together.", "Miljö": "Environment", "Vi värnar om miljön och uppmuntrar våra deltagare att ta med egna sängkläder och handduk. Det går att hyra vid behov.": "We care for the environment and encourage our guests to bring their own bed linen and towel. These can be rented if needed.", "Trygghet": "Safety", "Vi vill främja gemenskaper som är trygga för alla. Våra sammankomster är alkohol- och drogfria, och vi möter varandra med respekt, omtanke och nyfikenhet – oavsett ålder, bakgrund eller erfarenhet.": "We want to foster communities that are safe for everyone. Our gatherings are alcohol- and drug-free, and we meet each other with respect, care and curiosity – whatever your age, background or experience.", "Sovhuset med plats för cirka 40 gäster i flerbäddsrum, avskilt från de gemensamma ytorna. Enkelrum i mån av plats mot tillägg.": "The sleeping house for around 40 guests in shared rooms, set apart from the shared spaces. Single rooms subject to availability, for an extra charge.", "Festivalen Yggdrasil": "The Yggdrasil festival", "Retreats, mindre sammankomster, lediga perioder och förhandsbesked om Yggdrasil – en del av det som händer vid Skutesjön går bara ut till dem som står på listan.": "Retreats, smaller gatherings, free periods and early word on Yggdrasil – some of what happens at Skutesjön only goes out to those on the list.", "Healingcenter · Nordisk natur": "Healing centre · Nordic nature", "Upptäck platsen": "Discover the place", "Datum, retreats, Yggdrasil och lediga perioder – bara när det finns något att berätta.": "Dates, retreats, Yggdrasil and free periods – only when there is something to tell.", "Event och lediga datum": "Events and available dates", "Se vad som händer på Skutesjön och vilka datum som är lediga att hyra. Välj ett ledigt datum – eller två för en period – och skicka en förfrågan.": "See what's happening at Skutesjön and which dates are available to rent. Pick an available date – or two for a period – and send an enquiry.", "Uthyrt": "Booked", "Ledigt att hyra": "Available to rent", "Kommande event": "Upcoming events", "Platsen i 3D": "The place in 3D", "Gå runt på Skutesjön": "Walk around Skutesjön", "Utforska området, gemenskapshuset och sovhuset i en 3D-modell byggd från bygglovsritningarna. Lyft av taket och se rummen våning för våning.": "Explore the grounds, the community house and the sleeping house in a 3D model built from the building plans. Lift the roof and see the rooms floor by floor.", "Utforska i 3D": "Explore in 3D", "Dra för att rotera · nyp eller scrolla för att zooma": "Drag to rotate · pinch or scroll to zoom", "Klar": "Done", "Mått avlästa från ritningar och kan avvika något. Färger och material är antagna.": "Measurements are read from drawings and may differ slightly. Colours and materials are assumed.", "Öppna i helskärm →": "Open full screen →", "Mörkgrönt läge": "Dark green mode", "Ljust läge": "Light mode", "Det som inte alltid": "What isn't always", "delas öppet": "shared openly", "Hyr platsen för en kväll, en dag, en helg eller en hel vecka – vi formar upplägget efter ert event.": "Rent the place for an evening, a day, a weekend or a whole week – we shape the arrangement around your event.", "Frågor & svar": "Questions & answers", "Vad behöver du veta för att säga ja?": "What do you need to know to say yes?", "Raka svar för dig som ska ansvara för en grupp. Markera det du vill veta mer om, så följer frågan med i ditt mejl.": "Straight answers for you who will be responsible for a group. Mark what you want to know more about and the question will follow into your email.", "Skicka": "Send", "ett mejl.": "an email.", "Det behöver inte vara färdigt. Svara på tre frågor så skriver vi mejlet åt dig. Vi återkommer inom några dagar med förslag på upplägg och pris.": "It does not have to be finished. Answer three questions and we write the email for you. We get back within a few days with a suggested set-up and price.", "Vad vill ni skapa?": "What do you want to create?", "Ceremoni & cirkel": "Ceremony & circle", "Kurs": "Course", "Bröllop & firande": "Wedding & celebration", "Spa & bastu": "Spa & sauna", "Något eget": "Something else", "Hur många är ni?": "How many are you?", "Under 10": "Under 10", "Fler än 40": "More than 40", "Sovhuset rymmer ca 40. Vi löser gärna resten tillsammans.": "The sleeping house holds about 40. We are happy to solve the rest together.", "När och hur länge?": "When and for how long?", "En kväll": "An evening", "En dag": "A day", "En helg": "A weekend", "En vecka": "A week", "Datum": "Dates", "PH::t.ex. 6–8 november, eller våren 2027": "PH::e.g. 6–8 November, or spring 2027", "Er idé med egna ord (valfritt)": "Your idea in your own words (optional)", "PH::Vad vill ni göra här?": "PH::What would you like to do here?", "Till": "To", "Ämne": "Subject", "Kopiera texten": "Copy the text", "Mejla Skutesjön": "Email Skutesjön", "Kopiera adress": "Copy address", "Öppnas inget mejlprogram? Kopiera texten och klistra in den i ett nytt mejl.": "No email app opening? Copy the text and paste it into a new email.", "Var sover alla?": "Where does everyone sleep?", "I sovhuset, en egen byggnad med plats för ca 40 gäster i flerbäddsrum.": "In the sleeping house, a separate building with room for about 40 guests in shared rooms.", "Separat logi för kvinnor och män om ni önskar, i mån av plats.": "Separate rooms for women and men if you wish, as space allows.", "Enkelrum finns i vissa fall, mot tillägg.": "Single rooms are sometimes available for an extra charge.", "Övernattning före och efter ert event kan bokas.": "Nights before and after your event can be booked.", "Hur blir det med maten?": "What about food?", "Gemenskapshuset har ett stort kök där ni kan laga mat till hela gruppen.": "The community house has a large kitchen where you can cook for the whole group.", "Maten vi serverar är i största möjliga mån ekologisk, vegetarisk och vegansk, närproducerad och närodlad.": "The food we serve is as far as possible organic, vegetarian and vegan, locally produced and grown.", "Måltiderna äts tillsammans. Berätta i mejlet om ni vill laga själva eller ha mat serverad.": "Meals are eaten together. Tell us in your email whether you want to cook yourselves or have food served.", "Hur tar sig gruppen hit?": "How does the group get here?", "Tåg eller buss till Kinna. Därifrån hjälper vi till att samordna hämtning för grupper.": "Train or bus to Kinna. From there we help arrange pick-up for groups.", "Med bil: parkering vid infarten. Sista biten är grusväg.": "By car: parking at the entrance. The last stretch is a gravel road.", "Adress: Skutesjövägen 27, 511 92 Örby.": "Address: Skutesjövägen 27, 511 92 Örby.", "Vad gör vi om det regnar?": "What if it rains?", "Gemenskapshuset har en ljus, luftig yogasal och ett stort kök där hela gruppen kan samlas.": "The community house has a bright, airy yoga hall and a large kitchen where the whole group can gather.", "Två bastur och ett spaliknande behandlingsrum med massagebänk.": "Two saunas and a spa-like treatment room with a massage table.", "Sommartid står en stor tipi med eldstad i mitten.": "In summer there is a large tipi with a fireplace in the middle.", "Får vi elda och basta?": "Can we have fires and use the sauna?", "Ja. Det finns flera eldplatser och ved finns alltid.": "Yes. There are several fire pits and there is always firewood.", "Två bastur: en vedeldad och en eldriven. Ibland hålls aufguss.": "Two saunas: one wood-fired and one electric. Sometimes there is aufguss.", "Badplats i sjön, året om.": "Swimming in the lake, all year round.", "Vad behöver deltagarna ta med?": "What should participants bring?", "Egna sängkläder och handduk. Det går att hyra om någon inte har med sig.": "Their own bed linen and towel. They can be rented if someone does not bring them.", "Kläder för skog och väder. Stigar binder ihop husen, skogen och sjön.": "Clothes for forest and weather. Paths connect the houses, the forest and the lake.", "Hur trygg är miljön?": "How safe is the environment?", "Sammankomsterna är alkohol- och drogfria.": "Gatherings are free from alcohol and drugs.", "Vi vill främja gemenskaper som är trygga för alla, med respekt, omtanke och nyfikenhet.": "We want to foster communities that are safe for everyone, with respect, care and curiosity.", "Värdarna bor här året runt och finns på plats under er vistelse.": "The hosts live here all year and are on site during your stay.", "Vad kostar det?": "What does it cost?", "Pris efter upplägg. Det beror på hur många ni är, hur länge ni stannar och vad ni vill ha med.": "Price depends on your set-up: how many you are, how long you stay and what you want included.", "Skriv några rader om er plan, så återkommer vi med förslag på upplägg och pris inom några dagar.": "Write a few lines about your plan and we will come back with a suggested set-up and price within a few days."};
+var SV={};for(var k in EN)SV[EN[k]]=k;
+function swap(map){
+  var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);var n,nodes=[];
+  while(n=w.nextNode())nodes.push(n);
+  nodes.forEach(function(n){if(!n.parentElement||/^(SCRIPT|STYLE)$/.test(n.parentElement.tagName))return;
+    var raw=n.nodeValue,t=raw.replace(/\s+/g,' ').trim();if(!t||!map[t])return;
+    var lead=raw.match(/^\s*/)[0],trail=raw.match(/\s*$/)[0];n.nodeValue=lead+map[t]+trail;});
+  document.querySelectorAll('[placeholder]').forEach(function(e){var k='PH::'+e.placeholder;if(map[k])e.placeholder=map[k].slice(4);});
+  document.querySelectorAll('[data-label]').forEach(function(e){var k='DL::'+e.dataset.label;if(map[k])e.dataset.label=map[k].slice(4);});
+}
+var lang='sv';
+try{lang=localStorage.getItem('skute-lang')||(location.hash==='#en'?'en':'sv');}catch(e){}
+function setLang(l){
+  if(l===lang)return;
+  swap(l==='en'?EN:SV);lang=l;document.documentElement.lang=l;
+  document.querySelectorAll('.lang-btn').forEach(function(b){b.textContent=l==='en'?'SV':'EN';b.setAttribute('aria-label',l==='en'?'Byt till svenska':'Switch to English');});
+  try{localStorage.setItem('skute-lang',l);}catch(e){}
+}
+document.querySelectorAll('.lang-btn').forEach(function(b){b.addEventListener('click',function(){setLang(lang==='en'?'sv':'en');});});
+if(lang==='en'){lang='sv';setLang('en');}
+window.skuteSetLang=setLang;
+})();
+</script>
+<script>
+(function(){var b=document.getElementById('toTop');if(!b)return;
+function u(){b.classList.toggle('show',window.scrollY>window.innerHeight*0.8);}
+window.addEventListener('scroll',u,{passive:true});u();
+b.addEventListener('click',function(){window.scrollTo({top:0,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});});
+})();
+</script>
+<script>
+(function(){var f=document.getElementById('newsletterForm');if(!f)return;
+f.addEventListener('submit',function(ev){ev.preventDefault();var e=document.getElementById('nl-email');var v=e.value.trim();if(!v||v.indexOf('@')<0){e.focus();return;}
+window.location.href='mailto:greetskutesjon@gmail.com?subject='+encodeURIComponent('Anmälan till nyhetsbrev')+'&body='+encodeURIComponent('Jag vill prenumerera på Skutesjöns nyhetsbrev.\nE-post: '+v);
+document.getElementById('nl-toast').hidden=false;});
+})();
+</script>
+<script>
+(function(){var m=document.getElementById('map');if(!m)return;
+if(/claude\.ai$|claudeusercontent|artifact/i.test(location.hostname))return; // inbäddad karta blockeras i artefakt-visaren
+var f=document.createElement('iframe');f.title='Karta till Skutesjön';f.loading='lazy';f.referrerPolicy='no-referrer-when-downgrade';f.allowFullscreen=true;
+f.src='https://www.google.com/maps?q=57.48908,12.748896&z=13&hl=sv&output=embed';m.insertBefore(f,m.firstChild);
+})();
+</script>
+<script>
+(function(){var pop=document.getElementById('nlPop');if(!pop)return;
+var KEY='skute-nl-dismissed';var seen=false;try{seen=!!localStorage.getItem(KEY);}catch(e){}
+if(seen)return;
+function open(){pop.hidden=false;requestAnimationFrame(function(){pop.classList.add('show');});document.body.classList.add('nav-open');var e=document.getElementById('nl-email-pop');setTimeout(function(){e&&e.focus();},450);}
+function close(){pop.classList.remove('show');document.body.classList.remove('nav-open');setTimeout(function(){pop.hidden=true;},400);try{localStorage.setItem(KEY,String(Date.now()));}catch(e){}}
+pop.querySelector('.close').addEventListener('click',close);pop.querySelector('.later').addEventListener('click',close);
+pop.addEventListener('click',function(ev){if(ev.target===pop)close();});
+document.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&!pop.hidden)close();});
+var shown=false;function trigger(){if(shown)return;shown=true;open();}
+setTimeout(trigger,20000);
+window.addEventListener('scroll',function(){if(window.scrollY>document.documentElement.scrollHeight*0.45)trigger();},{passive:true});
+var f=document.getElementById('newsletterFormPop');
+f.addEventListener('submit',function(ev){ev.preventDefault();var e=document.getElementById('nl-email-pop');var v=e.value.trim();if(!v||v.indexOf('@')<0){e.focus();return;}
+window.location.href='mailto:greetskutesjon@gmail.com?subject='+encodeURIComponent('Anmälan till nyhetsbrev')+'&body='+encodeURIComponent('Jag vill prenumerera på Skutesjöns nyhetsbrev.\nE-post: '+v);
+document.getElementById('nl-toast-pop').hidden=false;try{localStorage.setItem(KEY,'joined');}catch(x){}setTimeout(close,2500);});
+})();
+</script>
+<style>
+/* Lightbox */
+.lb{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:rgba(12,16,14,.94);opacity:0;pointer-events:none;transition:opacity .25s}
+.lb.open{opacity:1;pointer-events:auto}
+.lb img{max-width:min(94vw,1600px);max-height:86vh;max-height:86svh;object-fit:contain;display:block;border-radius:2px;box-shadow:0 30px 80px -30px rgba(0,0,0,.8);user-select:none;-webkit-user-drag:none;touch-action:pan-y}
+.lb button{position:absolute;background:rgba(236,233,225,.08);border:1px solid rgba(236,233,225,.3);color:#ECE9E1;border-radius:999px;width:52px;height:52px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;transition:background .2s}
+.lb button:hover,.lb button:focus-visible{background:rgba(236,233,225,.22);outline:none}
+.lb button svg{width:20px;height:20px}
+.lb .lb-close{top:calc(16px + env(safe-area-inset-top,0px));right:16px}
+.lb .lb-prev{left:16px;top:50%;transform:translateY(-50%)}
+.lb .lb-next{right:16px;top:50%;transform:translateY(-50%)}
+.lb .lb-count{position:absolute;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;color:rgba(236,233,225,.7);font:500 .72rem/1 "Manrope",system-ui,sans-serif;letter-spacing:.2em}
+@media (max-width:640px){.lb .lb-prev,.lb .lb-next{top:auto;bottom:calc(8px + env(safe-area-inset-bottom,0px));transform:none}.lb img{max-width:100vw;max-height:78svh;border-radius:0}}
+img.lb-zoom{cursor:zoom-in}
+body.lb-lock{overflow:hidden}
+</style>
+<div class="lb" id="lightbox" role="dialog" aria-modal="true" aria-label="Bildvisning" aria-hidden="true">
+  <img alt="">
+  <button class="lb-prev" type="button" aria-label="Föregående bild"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <button class="lb-next" type="button" aria-label="Nästa bild"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5l7 7-7 7"/></svg></button>
+  <button class="lb-close" type="button" aria-label="Stäng"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <div class="lb-count"></div>
+</div>
+<script>
+(function(){
+  var lb=document.getElementById('lightbox'); if(!lb) return;
+  var big=lb.querySelector('img'), cnt=lb.querySelector('.lb-count'), list=[], idx=0, lastFocus=null;
+  function collect(){
+    list=[].slice.call(document.querySelectorAll('main img, section img')).filter(function(im,i,a){
+      if(a.indexOf(im)!==i) return false;
+      if(im.closest('header,nav,.nl-pop,.lb,footer,a,svg,.map,.no-zoom')) return false;
+      var src=im.currentSrc||im.src||''; if(!src||/^data:image\/svg/.test(src)) return false;
+      return true;
+    });
+    list.forEach(function(im){im.classList.add('lb-zoom');});
+  }
+  function show(i){
+    idx=(i+list.length)%list.length; var im=list[idx];
+    big.src=im.currentSrc||im.src; big.alt=im.alt||'';
+    cnt.textContent=(idx+1)+' / '+list.length;
+    var p=list[(idx+1)%list.length]; if(p){var pre=new Image();pre.src=p.currentSrc||p.src;}
+  }
+  function open(i){lastFocus=document.activeElement;show(i);lb.classList.add('open');lb.setAttribute('aria-hidden','false');document.body.classList.add('lb-lock');lb.querySelector('.lb-close').focus();}
+  function close(){lb.classList.remove('open');lb.setAttribute('aria-hidden','true');document.body.classList.remove('lb-lock');if(lastFocus&&lastFocus.focus)lastFocus.focus();}
+  collect();
+  document.addEventListener('click',function(e){
+    var im=e.target.closest&&e.target.closest('img.lb-zoom'); if(!im||lb.contains(im)) return;
+    var i=list.indexOf(im); if(i<0) return; e.preventDefault(); open(i);
+  });
+  lb.querySelector('.lb-prev').addEventListener('click',function(e){e.stopPropagation();show(idx-1);});
+  lb.querySelector('.lb-next').addEventListener('click',function(e){e.stopPropagation();show(idx+1);});
+  lb.querySelector('.lb-close').addEventListener('click',close);
+  lb.addEventListener('click',function(e){if(e.target===lb)close();});
+  document.addEventListener('keydown',function(e){
+    if(!lb.classList.contains('open')) return;
+    if(e.key==='Escape')close(); else if(e.key==='ArrowRight')show(idx+1); else if(e.key==='ArrowLeft')show(idx-1);
+  });
+  var x0=null,y0=null;
+  lb.addEventListener('touchstart',function(e){var t=e.touches[0];x0=t.clientX;y0=t.clientY;},{passive:true});
+  lb.addEventListener('touchend',function(e){if(x0===null)return;var t=e.changedTouches[0],dx=t.clientX-x0,dy=t.clientY-y0;x0=null;
+    if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy))show(idx+(dx<0?1:-1));},{passive:true});
+})();
+</script>
+
+
+</body></html>

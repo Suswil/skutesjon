@@ -1,0 +1,807 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Skutesjön i 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600&display=swap">
+<script>
+/* Tema följer sajtens val (skute-theme), inte datorns mörka läge */
+(function(){var t='light';try{t=localStorage.getItem('skute-theme')||'light';}catch(e){}document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light');})();
+</script>
+<style>
+:root{
+  --bg:#F5F0E8; --panel:rgba(245,240,232,.94); --ink:#3A3631; --muted:#6B635A; --line:rgba(58,54,49,.16);
+  --accent:#66735F; --accent-ink:#FFFFFF; --sky:#DFE3DA; --chip:rgba(245,240,232,.92); --chip-ink:#3A3631;
+  --shadow:0 8px 28px rgba(58,54,49,.14);
+  --f-disp:"Cormorant Garamond",Georgia,serif;
+  --f-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"Manrope",system-ui,sans-serif;
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#151C18; --panel:rgba(21,28,24,.92); --ink:#ECE9E1; --muted:#A9B3A6; --line:rgba(236,233,225,.14);
+  --accent:#B6C6B0; --accent-ink:#151C18; --sky:#1B2420; --chip:rgba(21,28,24,.86); --chip-ink:#ECE9E1;
+  --shadow:0 8px 28px rgba(0,0,0,.4);
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);overflow:hidden}
+#app{position:fixed;inset:0}
+#stage{position:absolute;inset:0}
+#stage canvas{display:block;width:100%;height:100%;touch-action:none}
+#labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.lbl{position:absolute;left:0;top:0;white-space:nowrap;font-family:var(--f-body);text-transform:uppercase;letter-spacing:.1em;
+  background:var(--chip);color:var(--chip-ink);padding:3px 8px 4px;border-radius:4px;font-size:10.5px;font-weight:600;line-height:1.2;text-align:center;
+  box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.lbl small{display:block;text-transform:none;letter-spacing:0;font-size:10px;font-weight:400;color:var(--muted)}
+.lbl.small{font-size:9.5px;padding:1px 6px}
+.lbl.site{background:transparent;box-shadow:none;font-family:var(--f-disp);font-size:19px;font-weight:600;letter-spacing:.06em;text-transform:none;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.lbl.bldg{background:var(--accent);color:var(--accent-ink);font-size:11px}
+.lbl.bldg small{color:var(--accent-ink);opacity:.85}
+
+.panel{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));left:16px;width:300px;max-height:calc(100% - 32px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
+  overflow:auto;background:var(--panel);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
+  padding:16px;display:flex;flex-direction:column;gap:14px}
+.eyebrow{margin:0;font-size:10.5px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+h1{margin:2px 0 0;font-family:var(--f-disp);font-weight:600;font-size:32px;letter-spacing:.01em;line-height:1}
+.lede{margin:6px 0 0;font-size:13px;line-height:1.5;color:var(--muted);text-wrap:pretty}
+.group{display:flex;flex-direction:column;gap:6px}
+.glabel{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{font:500 12.5px/1.1 var(--f-body);color:var(--ink);background:transparent;border:0;padding:9px 4px;cursor:pointer;border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+#views{grid-template-columns:repeat(2,1fr);border-radius:14px}
+#views button:nth-child(2){border-right:0}
+#views button:nth-child(-n+2){border-bottom:1px solid var(--line)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.toggle{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer}
+.toggle input{accent-color:var(--accent);width:16px;height:16px}
+#rooms{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line);padding-top:12px}
+.rlist h2{margin:0 0 4px;font-family:var(--f-disp);font-size:18px;font-weight:600}
+.rlist ul{list-style:none;margin:0;padding:0}
+.rlist li button{display:flex;justify-content:space-between;gap:8px;width:100%;background:none;border:0;border-bottom:1px dotted var(--line);
+  padding:5px 2px;font:400 13px/1.2 var(--f-body);color:var(--ink);cursor:pointer;text-align:left}
+.rlist li button:hover{color:var(--accent)}
+.rlist .m2{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.facts{display:grid;grid-template-columns:1fr auto;gap:4px 12px;font-size:13px;margin:0}
+.facts dt{color:var(--muted)} .facts dd{margin:0;font-size:12.5px;font-variant-numeric:tabular-nums;text-align:right}
+.note{margin:0;font-size:11.5px;line-height:1.5;color:var(--muted)}
+.hint{position:absolute;right:16px;bottom:calc(14px + env(safe-area-inset-bottom,0px));margin:0;font-size:11px;color:var(--muted);
+  background:var(--chip);padding:6px 11px;border-radius:999px;max-width:calc(100% - 32px)}
+
+/* Fäll ihop / ut – på alla skärmbredder */
+.phead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.panel-toggle{flex:none;display:inline-flex;align-items:center;gap:6px;font:600 11px var(--f-body);letter-spacing:.1em;text-transform:uppercase;
+  background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:7px 12px 7px 13px;cursor:pointer}
+.panel-toggle svg{width:12px;height:12px}
+.panel.collapsed{width:auto;padding:10px 10px 10px 16px;gap:0}
+.panel.collapsed > :not(.phead){display:none!important}
+.panel.collapsed .eyebrow,.panel.collapsed .lede{display:none}
+.panel.collapsed h1{font-size:22px;margin:3px 0 0;cursor:pointer}
+.panel.collapsed .phead{align-items:center}
+.panel:not(.collapsed) .panel-toggle svg{transform:rotate(180deg)}
+@media (max-width:640px){
+  .panel{top:auto;bottom:calc(12px + env(safe-area-inset-bottom,0px));left:12px;right:12px;width:auto;max-height:52%;padding:12px 12px 12px 14px;gap:10px}
+  .panel.collapsed{right:auto}
+  .panel .panel-toggle svg{transform:rotate(180deg)}
+  .panel:not(.collapsed) .panel-toggle svg{transform:none}
+  h1{font-size:26px} .lede{display:none}
+  .hint{display:none}
+}
+</style>
+
+<div id="app">
+  <div id="stage"></div>
+  <div id="labels"></div>
+  <aside class="panel" id="panel">
+    <header class="phead">
+      <div>
+        <p class="eyebrow">Gullberg 15:2 · Marks kommun</p>
+        <h1 id="ptitle">Skutesjön</h1>
+        <p class="lede">Huvudbyggnaden och lägergården, uppbyggda från bygglovsritningarna i skala 1:100 och placerade efter Lantmäteriets karta.</p>
+      </div>
+      <button class="panel-toggle" id="ptoggle" aria-expanded="true" aria-controls="panel"><span>Dölj</span><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.2 6 8l4-3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </header>
+    <div class="group">
+      <span class="glabel">Vy</span>
+      <div class="seg" id="views">
+        <button data-view="site">Området</button>
+        <button data-view="main" aria-pressed="true">Huvudbyggnad</button>
+        <button data-view="dorm">Lägergården</button>
+        <button data-view="lake">Sjön & bryggan</button>
+      </div>
+    </div>
+    <div class="group">
+      <span class="glabel">Våning</span>
+      <div class="seg" id="floors">
+        <button data-mode="ext" aria-pressed="true">Exteriör</button>
+        <button data-mode="B">Bottenvåning</button>
+        <button data-mode="M">Markvåning</button>
+      </div>
+    </div>
+    <label class="toggle"><input type="checkbox" id="lblToggle" checked> Visa rumsnamn och platser</label>
+    <div id="rooms"></div>
+    <p class="note">Mått är avlästa från fotograferade ritningar och kan avvika upp till en halvmeter. Färger och material är antagna. Källa: Marks kommun, Stadsarkitektkontoret (Dnr 94/182), Lantmäteriet och drönarfilm 2026 (fasadfärg, solpaneler, tillbyggnad, brygga, bro och igenvuxen sjö).</p>
+  </aside>
+  <p class="hint">Dra för att rotera · scrolla för att zooma · högerklick för att panorera</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+const V3 = THREE.Vector3;
+if(THREE.ColorManagement) THREE.ColorManagement.legacyMode = false;
+const $ = s => document.querySelector(s);
+const stage = $('#stage');
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- renderer / scene ---------- */
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio, Math.min(innerWidth,innerHeight)<700 ? 1.6 : 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+const LITE = Math.min(innerWidth,innerHeight) < 700;
+stage.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(38,1,0.3,4000);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = 0.08;
+controls.maxPolarAngle = Math.PI*0.485; controls.minDistance = 3; controls.maxDistance = 900;
+
+const hemi = new THREE.HemisphereLight(0xf1f4ef, 0x6f765f, 0.55); scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xfff0da, 1.05);
+sun.castShadow = true; sun.shadow.mapSize.set(LITE?1536:2560,LITE?1536:2560);
+Object.assign(sun.shadow.camera,{left:-50,right:50,top:50,bottom:-50,near:1,far:400});
+sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.04;
+scene.add(sun, sun.target);
+function aimSun(t){ sun.target.position.copy(t); sun.position.set(t.x-55, t.y+95, t.z+75); }
+
+/* himmel: mjuk gradient + enkel omgivningsreflex (vatten, glas, solpaneler) */
+const pmrem = new THREE.PMREMGenerator(renderer);
+function skyTex(top,mid,bot){ const c=document.createElement('canvas'); c.width=4; c.height=256; const x=c.getContext('2d');
+  const g=x.createLinearGradient(0,0,0,256); g.addColorStop(0,top); g.addColorStop(.62,mid); g.addColorStop(1,bot); x.fillStyle=g; x.fillRect(0,0,4,256);
+  const t=new THREE.CanvasTexture(c); t.encoding=THREE.sRGBEncoding; return t; }
+function envFrom(top,hor,gnd){ const es=new THREE.Scene();
+  const geo=new THREE.SphereGeometry(10,32,16); const col=[]; const p=geo.attributes.position; const cT=new THREE.Color(top),cH=new THREE.Color(hor),cG=new THREE.Color(gnd),c=new THREE.Color();
+  for(let i=0;i<p.count;i++){ const y=p.getY(i)/10; if(y>0) c.copy(cH).lerp(cT,Math.pow(y,.6)); else c.copy(cH).lerp(cG,Math.min(1,-y*4)); col.push(c.r,c.g,c.b); }
+  geo.setAttribute('color',new THREE.Float32BufferAttribute(col,3));
+  es.add(new THREE.Mesh(geo,new THREE.MeshBasicMaterial({side:THREE.BackSide,vertexColors:true})));
+  return pmrem.fromScene(es,0.035).texture; }
+let envLight=null, envDark=null;
+function applyTheme(){
+  const dark = document.documentElement.getAttribute('data-theme')==='dark';
+  if(dark){ scene.background=skyTex('#0f1714','#1d2925','#26332d'); scene.fog=new THREE.Fog(0x24312b,300,1000);
+    envDark = envDark || envFrom(0x2b3d47,0x55635c,0x2c3626); scene.environment=envDark; hemi.intensity=.42; sun.intensity=.85; renderer.toneMappingExposure=.95; }
+  else { scene.background=skyTex('#b9cdd6','#e4e6dc','#ebe7dc'); scene.fog=new THREE.Fog(0xe6e5dc,360,1150);
+    envLight = envLight || envFrom(0x9fbccb,0xe8e6da,0x7d8a62); scene.environment=envLight; hemi.intensity=.5; sun.intensity=1.35; renderer.toneMappingExposure=1.0; }
+}
+applyTheme();
+new MutationObserver(applyTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+/* ---------- materials & helpers ---------- */
+const matCache = {};
+function mat(c, o){ const k = c + JSON.stringify(o||{}); if(!matCache[k]) matCache[k] = new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.9,metalness:0},o||{})); return matCache[k]; }
+/* procedurella texturer – ritas en gång på canvas, 1 ruta = tile meter */
+let seedT=11; const rT=()=>(seedT=(seedT*16807)%2147483647)/2147483647;
+function ctex(size,tile,draw){ const c=document.createElement('canvas'); c.width=c.height=size; const x=c.getContext('2d'); draw(x,size);
+  const t=new THREE.CanvasTexture(c); t.wrapS=t.wrapT=THREE.RepeatWrapping; t.encoding=THREE.sRGBEncoding; t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy()); t.repeat.set(1/tile,1/tile); return t; }
+function hx(c,dl){ const k=new THREE.Color(c); const h={}; k.getHSL(h); k.setHSL(h.h,h.s,Math.max(0,Math.min(1,h.l+dl))); return '#'+k.getHexString(); }
+function noise(x,S,base,amp,n,sz){ for(let i=0;i<n;i++){ x.fillStyle=hx(base,(rT()-.5)*amp); const r=sz*(.4+rT()); x.globalAlpha=.35+rT()*.5; x.fillRect(rT()*S,rT()*S,r,r); } x.globalAlpha=1; }
+// stående panel (lockpanel): brädor + lock, varierad ton
+const boards=(base,tile,nb)=>ctex(256,tile,(x,S)=>{ x.fillStyle=base; x.fillRect(0,0,S,S); const bw=S/nb;
+  for(let i=0;i<nb;i++){ x.fillStyle=hx(base,(rT()-.5)*.06); x.fillRect(i*bw,0,bw,S); noise(x,S,base,.08,0,1);
+    for(let k=0;k<26;k++){ x.fillStyle=hx(base,(rT()-.5)*.09); x.globalAlpha=.5; x.fillRect(i*bw+rT()*bw,rT()*S,1,8+rT()*40); } x.globalAlpha=1;
+    x.fillStyle=hx(base,-.09); x.fillRect(i*bw,0,2,S); x.fillStyle=hx(base,.05); x.fillRect(i*bw+2,0,1,S); } });
+const plankTex=(base,tile,nb)=>ctex(256,tile,(x,S)=>{ x.fillStyle=base; x.fillRect(0,0,S,S); const bw=S/nb;
+  for(let i=0;i<nb;i++){ x.fillStyle=hx(base,(rT()-.5)*.08); x.fillRect(0,i*bw,S,bw);
+    for(let k=0;k<30;k++){ x.fillStyle=hx(base,(rT()-.5)*.12); x.globalAlpha=.45; x.fillRect(rT()*S,i*bw+rT()*bw,10+rT()*60,1); } x.globalAlpha=1;
+    x.fillStyle=hx(base,-.16); x.fillRect(0,i*bw,S,2); const j=rT()*S; x.fillRect(j,i*bw,2,bw); } });
+const seamTex=(base,tile)=>ctex(128,tile,(x,S)=>{ x.fillStyle=base; x.fillRect(0,0,S,S); noise(x,S,base,.05,300,2);
+  x.fillStyle=hx(base,.1); x.fillRect(0,0,3,S); x.fillStyle=hx(base,-.12); x.fillRect(3,0,2,S); });
+const speckle=(base,tile,amp,n,sz)=>ctex(256,tile,(x,S)=>{ x.fillStyle=base; x.fillRect(0,0,S,S); noise(x,S,base,amp,n,sz); });
+const solarTex=ctex(256,2,(x,S)=>{ x.fillStyle='#39414b'; x.fillRect(0,0,S,S); const cols=4,rows=8,m=2;
+  for(let i=0;i<cols;i++)for(let j=0;j<rows;j++){ const g=x.createLinearGradient(0,j*S/rows,0,(j+1)*S/rows); g.addColorStop(0,'#2d4170'); g.addColorStop(1,'#1a2646');
+    x.fillStyle=g; x.fillRect(i*S/cols+m,j*S/rows+m,S/cols-2*m,S/rows-2*m); x.fillStyle='rgba(150,170,205,.12)'; x.fillRect(i*S/cols+S/cols/2-1,j*S/rows+m,1,S/rows-2*m); } });
+const grassTex=speckle('#7a8f5f',7,.14,5200,3);
+const lawnTex=ctex(256,8,(x,S)=>{ x.fillStyle='#8aa152'; x.fillRect(0,0,S/2,S); x.fillStyle='#93a95a'; x.fillRect(S/2,0,S/2,S); noise(x,S,'#8ea556',.1,2600,2); });
+const pitchTex=ctex(256,10,(x,S)=>{ x.fillStyle='#6f9550'; x.fillRect(0,0,S,S/2); x.fillStyle='#7aa05a'; x.fillRect(0,S/2,S,S/2); noise(x,S,'#84a764',.08,1800,2); });
+const meadowTex=speckle('#95a065',6,.16,4200,3);
+const reedTex=ctex(256,5,(x,S)=>{ x.fillStyle='#7f8a50'; x.fillRect(0,0,S,S); noise(x,S,'#7f8a50',.16,3000,3); noise(x,S,'#9c9160',.12,900,4); });
+const gravelTex=speckle('#bab3a4',2,.22,6000,2.2);
+const tmat=(map,o)=>new THREE.MeshStandardMaterial(Object.assign({color:0xffffff,map,roughness:.9,metalness:0},o||{}));
+const MAT = {
+  ext: tmat(boards('#4c3d33',1,6)), base: tmat(speckle('#5b5148',1.5,.07,1400,2)), int: mat(0xf0ede6), roof: tmat(seamTex('#5d6163',.5),{roughness:.65,metalness:.25}),
+  solar: tmat(solarTex,{roughness:.22,metalness:.35}), white: mat(0xeeeeea), blue: tmat(boards('#8197a7',1,7)), gravel: tmat(gravelTex), lawn: tmat(lawnTex),
+  glass: mat(0x9cc2d1,{roughness:.12,metalness:.15,transparent:true,opacity:.5,depthWrite:false}),
+  door: tmat(boards('#6a4e39',.9,5)), wood: tmat(plankTex('#b08f69',1,3)), deck: tmat(plankTex('#9a7b5c',1.2,8)), slab: mat(0xc9c3b6),
+  red: tmat(boards('#8a3528',1,6)), trim: mat(0xf1eee7), plinth: tmat(speckle('#6e6b65',1.2,.1,1600,2)), stone: tmat(speckle('#8b8a84',1,.18,2200,3)),
+  frame: mat(0xf3f0ea,{roughness:.6}), dframe: mat(0x2e2722,{roughness:.6}), metal: mat(0x3b3f41,{roughness:.45,metalness:.6})
+};
+const FLOOR = {hall:0xd9c6a2, wet:0xc3d2d8, serv:0xd5d1c7, bed:0xdcccad};
+
+function box(g,x0,x1,y0,y1,z0,z1,m,shadow){
+  const me = new THREE.Mesh(new THREE.BoxGeometry(Math.abs(x1-x0),Math.abs(y1-y0),Math.abs(z1-z0)), m);
+  me.position.set((x0+x1)/2,(y0+y1)/2,(z0+z1)/2); worldUV(me.geometry,me.position);
+  me.castShadow = shadow!==false; me.receiveShadow = true; g.add(me); return me;
+}
+function worldUV(geo,o){ const p=geo.attributes.position,n=geo.attributes.normal,uv=geo.attributes.uv; if(!uv) return;
+  for(let i=0;i<p.count;i++){ const x=p.getX(i)+o.x,y=p.getY(i)+o.y,z=p.getZ(i)+o.z, ax=Math.abs(n.getX(i)),ay=Math.abs(n.getY(i));
+    if(ax>.5) uv.setXY(i,z,y); else if(ay>.5) uv.setXY(i,x,z); else uv.setXY(i,x,y); } uv.needsUpdate=true; }
+/* Wall along an axis. axis 'x' => runs along x at z=fixed. ops: [from,to,type,sillY,topY] with absolute coordinates. */
+function W(g,axis,fixed,a,b,y0,y1,ops,m,t,ext){
+  ops = (ops||[]).slice().sort((p,q)=>p[0]-q[0]); m = m||MAT.ext; t = t||0.2; ext = ext||0;
+  const seg=(s0,s1,ya,yb,mm,th,sh)=>{ if(s1-s0<0.001||yb-ya<0.001) return; th=th||t;
+    if(axis==='x') box(g,s0,s1,ya,yb,fixed-th/2,fixed+th/2,mm,sh); else box(g,fixed-th/2,fixed+th/2,ya,yb,s0,s1,mm,sh); };
+  let cur = a-ext;
+  for(const [o0,o1,type,sill,top] of ops){
+    const s = sill==null? y0 : sill, tp = top==null? y0+2.1 : top;
+    seg(cur,o0,y0,y1,m); seg(o0,o1,y0,s,m); seg(o0,o1,tp,y1,m);
+    if(type==='w'){ seg(o0,o1,s,tp,MAT.glass,0.04,false); seg(o0,o1,s-0.05,s,MAT.trim,t+0.06);
+      if(m!==MAT.int){ const F=MAT.frame, ft=t+0.05, fw=0.07; // karm, mittpost och tvärpost
+        seg(o0,o1,tp-fw,tp,F,ft,false); seg(o0,o0+fw,s,tp,F,ft,false); seg(o1-fw,o1,s,tp,F,ft,false);
+        if(o1-o0>0.95){ const mid=(o0+o1)/2; seg(mid-0.035,mid+0.035,s,tp,F,ft,false); }
+        if(tp-s>1.6){ const hy=s+(tp-s)*0.68; seg(o0,o1,hy-0.03,hy+0.03,F,ft,false); }
+        // fönsterbleck
+        seg(o0-0.05,o1+0.05,s-0.08,s-0.03,MAT.metal,t+0.16,false); } }
+    if(type==='d'){ seg(o0,o1,s,tp,MAT.door,0.07);
+      if(m!==MAT.int){ const F=MAT.frame, ft=t+0.05; seg(o0-0.08,o0,s,tp+0.08,F,ft,false); seg(o1,o1+0.08,s,tp+0.08,F,ft,false); seg(o0-0.08,o1+0.08,tp,tp+0.08,F,ft,false); } }
+    cur = o1;
+  }
+  seg(cur,b+ext,y0,y1,m);
+}
+const area = r => (r.x1-r.x0)*(r.z1-r.z0);
+const fmtArea = a => a<10 ? a.toFixed(1).replace('.',',') : Math.round(a).toString();
+const ss=(a,b,x)=>{const t=Math.min(1,Math.max(0,(x-a)/(b-a)));return t*t*(3-2*t)};
+
+/* ---------- labels ---------- */
+const labelLayer = $('#labels'); const labels = [];
+function addLabel(text,sub,parent,x,y,z,tag,kind){
+  const el = document.createElement('div'); el.className = 'lbl '+(kind||'room'); el.hidden = true;
+  el.innerHTML = '<span>'+text+'</span>' + (sub? '<small>'+sub+'</small>' : '');
+  labelLayer.appendChild(el); labels.push({el,parent,p:new V3(x,y,z),tag,kind:kind||'room',shown:false});
+}
+
+/* ================= HUVUDBYGGNAD ================= */
+/* Local coords: origin = NW corner of the two-storey block, x → east, z → south, metres. */
+const ROOMS_B = [
+  {n:'Samlingssal',x0:0,x1:11.3,z0:4.2,z1:10.5,t:'hall'},
+  {n:'Sammanträdesrum',x0:0,x1:4.5,z0:0,z1:4.2,t:'hall'},
+  {n:'Kapprum',x0:4.5,x1:6.6,z0:0,z1:4.2,t:'serv'},
+  {n:'Arkiv',x0:6.6,x1:7.8,z0:1.5,z1:2.8,t:'serv',small:1},
+  {n:'Förråd',x0:6.6,x1:7.8,z0:2.8,z1:4.2,t:'serv',small:1},
+  {n:'Expedition',x0:7.8,x1:11.3,z0:0,z1:4.2,t:'hall'},
+  {n:'Kök',x0:-12,x1:-7.3,z0:1.6,z1:4.2,t:'wet'},
+  {n:'Försäljning',x0:-12,x1:-7.3,z0:4.2,z1:8.2,t:'serv'},
+  {n:'Lilla samlingssalen',x0:-7.3,x1:0,z0:1.6,z1:8.2,t:'hall'},
+  {n:'Solaltan',x0:-14.8,x1:0,z0:8.2,z1:10.5,t:'deck',noFloor:1}
+];
+const ROOMS_M = [
+  {n:'Bastu · dam',x0:0,x1:3.6,z0:0,z1:2.05,t:'wood'},
+  {n:'Dusch · dam',x0:3.6,x1:7.35,z0:0,z1:2.05,t:'wet'},
+  {n:'Omklädning · dam',x0:3.6,x1:7.35,z0:2.05,z1:9.3,t:'wet'},
+  {n:'Motionsrum',x0:7.35,x1:11.3,z0:0,z1:9.3,t:'hall'},
+  {n:'Sluss / entré',x0:3.6,x1:11.3,z0:9.3,z1:10.5,t:'serv'},
+  {n:'Korridor',x0:0,x1:3.6,z0:2.05,z1:9.0,t:'serv'},
+  {n:'El-central',x0:0,x1:1.3,z0:9.0,z1:10.5,t:'serv',small:1},
+  {n:'Redskap',x0:-12,x1:-10.1,z0:1.6,z1:4.2,t:'serv'},
+  {n:'Pannrum',x0:-12,x1:-7.9,z0:4.2,z1:8.2,t:'serv'},
+  {n:'Duschar · herr',x0:-10.1,x1:-4.3,z0:1.6,z1:4.3,t:'wet'},
+  {n:'Bastu · herr',x0:-7.9,x1:-4.3,z0:4.3,z1:7.2,t:'wood'},
+  {n:'Förbad',x0:-7.9,x1:0,z0:7.2,z1:8.2,t:'wet',small:1},
+  {n:'Omklädning · herr',x0:-4.3,x1:0,z0:1.6,z1:7.2,t:'wet'},
+  {n:'Pelargång under altanen',x0:-12,x1:0,z0:8.2,z1:10.5,t:'out',noFloor:1}
+];
+
+const mainOuter = new THREE.Group(); mainOuter.rotation.y = 0.3; scene.add(mainOuter);
+const mainIn = new THREE.Group(); mainIn.position.set(1.75,0,-5.25); mainOuter.add(mainIn);
+const gM = new THREE.Group(), gB = new THREE.Group(), gRoof = new THREE.Group();
+mainIn.add(gM,gB,gRoof);
+
+// Markvåning — slab + exterior (concrete base, partly in the slope)
+box(gM,0,11.3,-0.3,0,0,10.5,MAT.slab,false); box(gM,-12,0,-0.3,0,1.6,8.2,MAT.slab,false);
+const yM0=-0.3, yM1=2.8;
+W(gM,'x',0,0,11.3,yM0,yM1,[],MAT.base,0.2,0.1);
+W(gM,'z',11.3,0,10.5,yM0,yM1,[[2.8,5.5,'w',1.0,2.3],[7.1,8.3,'w',1.0,2.3]],MAT.base,0.2,0.1);
+W(gM,'x',10.5,0,11.3,yM0,yM1,[[1.3,2.8,'w',1.1,2.4],[4.3,5.3,'d',0,2.2],[8.8,10.3,'w',1.1,2.4]],MAT.base,0.2,0.1);
+W(gM,'z',0,0,10.5,yM0,yM1,[[5.5,6.4,'o',0,2.1],[8.8,9.7,'d',0,2.2]],MAT.base,0.2,0);
+W(gM,'x',1.6,-12,0,yM0,yM1,[],MAT.base,0.2,0.1);
+W(gM,'z',-12,1.6,8.2,yM0,yM1,[[4.8,5.8,'d',0,2.1]],MAT.base,0.2,0.1);
+W(gM,'x',8.2,-12,0,yM0,yM1,[[-10.5,-9.4,'w',1.7,2.5],[-6.6,-5.5,'w',1.7,2.5],[-4.1,-3.2,'d',0,2.2],[-2.6,-1.5,'w',1.7,2.5]],MAT.base,0.2,0.1);
+// Markvåning interior
+const I=(axis,f,a,b,ops)=>W(gM,axis,f,a,b,0,2.8,ops,MAT.int,0.12);
+I('x',2.05,0,3.6,[[2.5,3.3,'o']]);
+I('z',3.6,0,9.3,[[1.2,1.9,'o'],[8.3,9.1,'o']]);
+I('x',2.05,3.6,7.35,[[4.6,5.6,'o']]);
+I('z',7.35,0,9.3,[]);
+I('x',9.3,3.6,11.3,[[4.8,5.8,'o'],[8.0,8.9,'o']]);
+I('z',1.3,9.0,10.5,[[9.3,9.9,'o']]); I('x',9.0,0,1.3,[]);
+I('z',-10.1,1.6,4.2,[[2.4,3.2,'o']]);
+I('x',4.2,-12,-7.9,[[-11.4,-10.6,'o']]);
+I('z',-7.9,4.2,8.2,[]);
+I('x',4.3,-7.9,-4.3,[[-6.9,-6.1,'o']]);
+I('z',-4.3,1.6,7.2,[[2.6,3.6,'o']]);
+I('x',7.2,-7.9,-4.3,[]);
+// fittings: sauna benches + changing bench
+box(gM,-7.8,-6.9,0,0.9,4.4,7.1,MAT.wood); box(gM,-6.9,-6.2,0,0.45,4.4,7.1,MAT.wood);
+box(gM,0.1,1.0,0,0.9,0.1,1.95,MAT.wood); box(gM,1.0,1.6,0,0.45,0.1,1.95,MAT.wood);
+box(gM,-3.4,-1.2,0,0.45,3.7,5.0,MAT.wood);
+box(gM,4.0,5.6,2.5,2.6,10.5,11.4,MAT.roof); // canopy over lower entrance
+// posts under the sun deck
+[-14.8,-12,-7.6,-3.9].forEach(x=>box(gM,x-0.08,x+0.08,0,2.8,10.34,10.5,MAT.wood));
+box(gM,-14.88,-14.72,0,2.8,8.2,8.36,MAT.wood);
+// west stair well to the boiler room
+box(gM,-14,-12.1,-0.3,-0.05,4.4,6.2,MAT.stone,false);
+
+// Bottenvåning — slab, exterior, interior
+box(gB,0,11.3,2.8,3.0,0,10.5,MAT.slab); box(gB,-12,0,2.8,3.0,1.6,8.2,MAT.slab);
+const yB0=2.8, yB1=5.9;
+W(gB,'x',0,0,11.3,yB0,yB1,[[2.3,3.6,'w',4.4,5.5],[5.3,6.3,'d',3.0,5.1],[9.0,10.2,'w',3.9,5.2]],MAT.ext,0.2,0.1);
+W(gB,'z',11.3,0,10.5,yB0,yB1,[[1.9,3.2,'w',3.9,5.2],[5.3,6.5,'w',3.9,5.2],[7.6,8.8,'w',3.9,5.2]],MAT.ext,0.2,0.1);
+W(gB,'x',10.5,0,11.3,yB0,yB1,[[1.2,2.6,'w',3.8,5.2],[3.6,5.0,'w',3.8,5.2],[6.1,7.6,'w',3.8,5.2],[8.6,10.2,'w',3.8,5.2]],MAT.ext,0.2,0.1);
+W(gB,'z',0,0,10.5,yB0,yB1,[[5.0,7.2,'o',3.0,5.3],[8.8,9.7,'w',3.0,5.1]],MAT.ext,0.2,0);
+W(gB,'x',1.6,-12,0,yB0,yB1,[[-10.9,-9.8,'w',3.9,5.2],[-6.7,-4.8,'w',3.9,5.2],[-2.6,-0.8,'w',3.9,5.2]],MAT.ext,0.2,0.1);
+W(gB,'z',-12,1.6,8.2,yB0,yB1,[[2.5,3.7,'w',3.9,5.2],[5.8,6.8,'w',3.9,5.2]],MAT.ext,0.2,0.1);
+W(gB,'x',8.2,-12,0,yB0,yB1,[[-11.2,-9.0,'w',3.0,5.2],[-8.6,-6.6,'w',3.8,5.2],[-4.8,-2.8,'w',3.8,5.2],[-2.4,-0.8,'w',3.0,5.2]],MAT.ext,0.2,0.1);
+const J=(axis,f,a,b,ops)=>W(gB,axis,f,a,b,3.0,5.9,ops,MAT.int,0.12);
+J('x',4.2,0,11.3,[[4.8,5.8,'o',3.0,5.1]]);
+J('z',4.5,0,4.2,[[0.6,1.5,'o',3.0,5.1]]);
+J('z',6.6,0,4.2,[[3.2,4.0,'o',3.0,5.1]]);
+J('z',7.8,1.5,4.2,[[1.8,2.5,'o',3.0,5.1]]);
+J('x',1.5,6.6,7.8,[]); J('x',2.8,6.6,7.8,[]);
+J('z',-7.3,1.6,8.2,[[4.2,5.4,'o',3.0,5.1]]);
+J('x',4.2,-12,-7.3,[[-11.0,-10.2,'o',3.0,5.1]]);
+box(gB,-11.9,-8.3,3.0,3.9,3.6,4.1,MAT.wood); // kitchen counter
+box(gB,-10.2,-8.3,3.0,4.0,4.5,4.9,MAT.wood); // sales counter
+// three steps in the wide opening between the halls
+for(let i=0;i<3;i++) box(gB,0.1+i*0.3,0.4+i*0.3,3.0,3.0+0.06*(i+1),5.0,7.2,MAT.wood,false);
+// sun deck + railing
+box(gB,-14.8,0,2.8,3.0,8.2,10.5,MAT.deck);
+box(gB,-14.8,0,4.0,4.07,10.44,10.52,MAT.wood); box(gB,-14.88,-14.8,4.0,4.07,8.2,10.5,MAT.wood); box(gB,-14.8,-12,4.0,4.07,8.18,8.26,MAT.wood);
+for(let x=-14.7;x<0;x+=0.5) box(gB,x-0.025,x+0.025,3.0,4.0,10.46,10.5,MAT.wood,false);
+for(let z=8.3;z<10.5;z+=0.5) box(gB,-14.86,-14.82,3.0,4.0,z-0.025,z+0.025,MAT.wood,false);
+// north entrance porch
+box(gB,4.2,6.6,2.8,3.05,-1.7,0,MAT.stone);
+box(gB,4.0,6.8,5.1,5.25,-1.9,0,MAT.roof);
+[4.25,6.55].forEach(x=>box(gB,x-0.06,x+0.06,3.05,5.1,-1.72,-1.6,MAT.wood));
+
+// Roof + chimneys
+box(gRoof,-0.4,11.7,5.9,6.15,-0.4,10.9,MAT.roof);
+box(gRoof,0.2,11.1,6.15,6.24,8.4,10.4,MAT.solar,false); box(gRoof,-11.8,-0.2,6.12,6.21,6.3,8.1,MAT.solar,false);
+box(gRoof,-12.4,0,5.9,6.12,1.2,8.6,MAT.roof);
+box(gRoof,-8.3,-7.7,5.9,7.1,4.4,5.0,MAT.stone);
+box(gRoof,4.5,5.0,5.9,7.1,3.9,4.4,MAT.stone);
+
+// Room floors and labels
+function roomFloors(g,list,y,tag,parent){
+  list.forEach(r=>{
+    const cx=(r.x0+r.x1)/2, cz=(r.z0+r.z1)/2;
+    if(!r.noFloor){ const c = r.t==='wood'?0xb99a72:FLOOR[r.t]; box(g,r.x0+0.07,r.x1-0.07,y,y+0.02,r.z0+0.07,r.z1-0.07,mat(c),false); }
+    addLabel(r.n, r.small?'':'≈ '+fmtArea(area(r))+' m²', parent, cx, y+0.35, cz, tag, r.small?'room small':'room');
+  });
+}
+roomFloors(gM,ROOMS_M,0,'M',mainIn);
+roomFloors(gB,ROOMS_B,3.0,'B',mainIn);
+
+// Slope: ground is at upper-floor level on the north side, lower-floor level toward the lake.
+(function berm(){
+  const xs=new Set(), zs=new Set();
+  for(let x=-34;x<=30;x+=1) xs.add(x);
+  for(let z=-32;z<=18;z+=1) zs.add(z);
+  [-12,0,11.3].forEach(v=>{xs.add(+(v-0.1).toFixed(2)); xs.add(+(v+0.1).toFixed(2));});
+  [0,1.6,8.2,10.5].forEach(v=>{zs.add(+(v-0.1).toFixed(2)); zs.add(+(v+0.1).toFixed(2));});
+  const X=[...xs].sort((a,b)=>a-b), Z=[...zs].sort((a,b)=>a-b);
+  const inside=(x,z)=>(x>0&&x<11.3&&z>0&&z<10.5)||(x>-12&&x<=0.0001&&z>1.6&&z<8.2);
+  const h=(x,z)=>{ if(inside(x,z)) return -0.35;
+    const north=1-ss(0,9,z), dx=Math.max(0,-15-x,x-11.3), dn=Math.max(0,-z);
+    return 0.02 + 3.0*north*(1-ss(3,16,dx))*(1-ss(8,22,dn)); };
+  const pos=[], idx=[];
+  for(const z of Z) for(const x of X) pos.push(x,h(x,z),z);
+  const nx=X.length;
+  for(let j=0;j<Z.length-1;j++) for(let i=0;i<nx-1;i++){ const a=j*nx+i,b=a+1,c=a+nx,d=c+1; idx.push(a,c,b,b,c,d); }
+  const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); geo.setIndex(idx); geo.computeVertexNormals();
+  const m=new THREE.Mesh(geo,mat(0x9aa982)); m.receiveShadow=true; mainIn.add(m);
+})();
+
+/* ================= LÄGERGÅRDEN (övernattning, bygglov 1994) ================= */
+const dormOuter = new THREE.Group(); dormOuter.position.set(82.5,0,-74.6); dormOuter.rotation.y = Math.PI/2; scene.add(dormOuter);
+const dormIn = new THREE.Group(); dormIn.position.set(-8.25,0,-4.15); dormOuter.add(dormIn);
+const dRoof = new THREE.Group(); dormIn.add(dRoof);
+box(dormIn,0,20.5,0,0.4,0,8.3,MAT.plinth);
+const DW=(axis,f,a,b,ops)=>W(dormIn,axis,f,a,b,0.4,3.0,ops,MAT.red,0.18,0.09);
+const DI=(axis,f,a,b,ops)=>W(dormIn,axis,f,a,b,0.4,3.0,ops,MAT.int,0.1);
+const win=(c,w)=>[c-w/2,c+w/2,'w',1.3,2.5];
+DW('x',0,0,20.5,[1.55,4.65,7.75,10.85,13.95].map(c=>win(c,1.2)).concat([[15.9,16.6,'w',1.8,2.5],win(18.8,1.2)]));
+DW('x',8.3,0,20.5,[[0.8,2.0,'w',1.3,2.5],[2.4,3.6,'w',1.3,2.5],[5.0,5.6,'w',1.8,2.5],win(7.75,1.2),win(10.85,1.2),win(13.95,1.2),[15.8,16.7,'d',0.4,2.5],win(18.8,1.2)]);
+DW('z',0,0,8.3,[[1.2,2.4,'w',1.3,2.5],[3.7,4.6,'d',0.4,2.5],[6.0,7.4,'w',1.3,2.5]]);
+DW('z',20.5,0,8.3,[[1.2,2.4,'w',1.3,2.5],[5.9,7.1,'w',1.3,2.5]]);
+DI('x',3.55,0,15.5,[0,3.1,6.2,9.3,12.4].map(x=>[x+2.0,x+2.8,'o',0.4,2.5]));
+DI('x',4.75,0,15.5,[[1.6,3.0,'o',0.4,2.5],[4.6,5.4,'o',0.4,2.5],[6.5,7.3,'o',0.4,2.5],[9.6,10.4,'o',0.4,2.5],[12.7,13.5,'o',0.4,2.5]]);
+[3.1,6.2,9.3,12.4].forEach(x=>DI('z',x,0,3.55,[]));
+[4.3,6.2,9.3,12.4].forEach(x=>DI('z',x,4.75,8.3,[]));
+DI('z',15.5,0,8.3,[[3.55,4.75,'o',0.4,2.5]]);
+DI('x',3.55,15.5,20.5,[[15.8,16.6,'o',0.4,2.5],[18.2,19.0,'o',0.4,2.5]]);
+DI('x',4.75,15.5,20.5,[[15.8,16.8,'o',0.4,2.5],[18.2,19.0,'o',0.4,2.5]]);
+DI('z',17,0,3.55,[]); DI('z',17,4.75,8.3,[]);
+// beds in the bedrooms
+[0,3.1,6.2,9.3,12.4].forEach(x=>{ box(dormIn,x+0.15,x+0.95,0.4,0.85,0.15,2.1,MAT.wood); box(dormIn,x+2.15,x+2.95,0.4,0.85,0.15,2.1,MAT.wood); });
+[6.2,9.3,12.4].forEach(x=>{ box(dormIn,x+0.15,x+0.95,0.4,0.85,6.2,8.15,MAT.wood); box(dormIn,x+2.15,x+2.95,0.4,0.85,6.2,8.15,MAT.wood); });
+// altan 4 x 10 m, entrance steps
+box(dormIn,-4,0,0.2,0.4,-0.85,9.15,MAT.deck);
+box(dormIn,-4.05,-3.97,0.4,1.4,-0.85,9.15,MAT.wood);
+box(dormIn,15.5,17.2,0,0.27,8.3,8.9,MAT.stone); box(dormIn,15.5,17.2,0,0.13,8.9,9.5,MAT.stone);
+box(dRoof,-0.5,21,3.0,3.22,-0.5,8.8,MAT.roof);
+box(dRoof,-0.52,21.02,2.92,3.0,-0.52,8.82,MAT.trim);
+const ROOMS_D = [
+  {n:'Rum 1',x0:0,x1:3.1,z0:0,z1:3.55,t:'bed'},{n:'Rum 2',x0:3.1,x1:6.2,z0:0,z1:3.55,t:'bed'},{n:'Rum 3',x0:6.2,x1:9.3,z0:0,z1:3.55,t:'bed'},
+  {n:'Rum 4',x0:9.3,x1:12.4,z0:0,z1:3.55,t:'bed'},{n:'Rum 5',x0:12.4,x1:15.5,z0:0,z1:3.55,t:'bed'},
+  {n:'Samlingsrum',x0:0,x1:4.3,z0:4.75,z1:8.3,t:'hall'},{n:'WC',x0:4.3,x1:6.2,z0:4.75,z1:8.3,t:'wet'},
+  {n:'Rum 6',x0:6.2,x1:9.3,z0:4.75,z1:8.3,t:'bed'},{n:'Rum 7',x0:9.3,x1:12.4,z0:4.75,z1:8.3,t:'bed'},{n:'Rum 8',x0:12.4,x1:15.5,z0:4.75,z1:8.3,t:'bed'},
+  {n:'Korridor',x0:0,x1:15.5,z0:3.55,z1:4.75,t:'serv',small:1},
+  {n:'Bad',x0:15.5,x1:17,z0:0,z1:3.55,t:'wet'},{n:'TV-rum',x0:17,x1:20.5,z0:0,z1:3.55,t:'hall'},
+  {n:'Hall',x0:15.5,x1:20.5,z0:3.55,z1:4.75,t:'serv',small:1},
+  {n:'Entré',x0:15.5,x1:17,z0:4.75,z1:8.3,t:'serv'},{n:'TV-rum',x0:17,x1:20.5,z0:4.75,z1:8.3,t:'hall'},
+  {n:'Altan',x0:-4,x1:0,z0:-0.85,z1:9.15,t:'deck',noFloor:1}
+];
+roomFloors(dormIn,ROOMS_D,0.4,'dorm',dormIn);
+
+/* ================= OMRÅDET ================= */
+/* Map photo (Lantmäteriet 1:3000) → metres; origin at the main building. */
+const P=(px,py)=>[(px-652)/2.4,(py-912)/2.4];
+const groundGeo=new THREE.PlaneGeometry(900,680); { const uv=groundGeo.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)*900,uv.getY(i)*680); }
+const ground=new THREE.Mesh(groundGeo, tmat(grassTex,{polygonOffset:true,polygonOffsetFactor:2,polygonOffsetUnits:2}));
+ground.rotation.x=-Math.PI/2; ground.position.set(150,0,-70); ground.receiveShadow=true; scene.add(ground);
+
+function flatShape(pts,y,m,closed){
+  const curve=new THREE.CatmullRomCurve3(pts.map(p=>new V3(p[0],0,p[1])),true,'centripetal');
+  const S=curve.getSpacedPoints(160);
+  const shape=new THREE.Shape(S.map(v=>new THREE.Vector2(v.x,-v.z)));
+  const geo=new THREE.ShapeGeometry(shape,2); geo.rotateX(-Math.PI/2);
+  const me=new THREE.Mesh(geo,m); me.position.y=y; me.receiveShadow=true; scene.add(me);
+  return S.map(v=>[v.x,v.z]);
+}
+function ribbon(pts,w,y,m){
+  const curve=new THREE.CatmullRomCurve3(pts.map(p=>new V3(p[0],y,p[1])),false,'centripetal');
+  const S=curve.getSpacedPoints(Math.max(30,pts.length*14)); const pos=[],idx=[];
+  S.forEach((p,i)=>{ const a=S[Math.max(0,i-1)], b=S[Math.min(S.length-1,i+1)];
+    let tx=b.x-a.x,tz=b.z-a.z; const l=Math.hypot(tx,tz)||1; tx/=l; tz/=l;
+    pos.push(p.x-tz*w/2,y,p.z+tx*w/2, p.x+tz*w/2,y,p.z-tx*w/2);
+    if(i<S.length-1){const k=i*2; idx.push(k,k+2,k+1,k+1,k+2,k+3);} });
+  const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3)); geo.setIndex(idx); geo.computeVertexNormals();
+  const me=new THREE.Mesh(geo,m); me.receiveShadow=true; scene.add(me); return S.map(v=>[v.x,v.z]);
+}
+const WATER = mat(0x557f8f,{roughness:.08,metalness:.15,side:THREE.DoubleSide});
+const MEADOW = tmat(meadowTex,{polygonOffset:true,polygonOffsetFactor:1,polygonOffsetUnits:1});
+const lake = flatShape([[265,1330],[290,1180],[360,1060],[440,1015],[540,1000],[620,995],[700,975],[770,945],[800,1005],[860,1045],[960,1080],[1060,1072],[1140,1085],[1150,1150],[1060,1185],[960,1215],[800,1255],[620,1300],[510,1330],[400,1345],[300,1340]].map(p=>P(...p)),0.06,WATER);
+const kilen = flatShape([[760,600],[870,560],[940,690],[1010,780],[1040,950],[980,1010],[870,1015],[790,960],[770,820]].map(p=>P(...p)),0.03,MEADOW);
+const streamN = ribbon([[40,300],[130,250],[210,270],[330,390],[430,430],[520,470],[600,445],[680,445],[740,480],[760,560],[752,660],[756,760],[762,860],[745,930],[705,975]].map(p=>P(...p)),5,0.07,WATER);
+const streamE = ribbon([[1110,1135],[1180,1105],[1260,1080],[1400,1065],[1520,1020],[1620,960],[1730,880],[1850,830],[1990,795]].map(p=>P(...p)),9,0.07,WATER);
+const road = ribbon([[-40,1353],[200,1362],[450,1372],[700,1302],[1000,1212],[1500,1072],[2000,935]].map(p=>P(...p)),7,0.05,mat(0x8a8277,{side:THREE.DoubleSide}));
+
+
+
+/* ===== Tillägg efter drönarfilm (2026-09-26) ===== */
+// Framför huvudbyggnaden, i byggnadens egna koordinater (följer dess vridning)
+(function front(){
+  const g=mainIn;
+  // grusväg längs framsidan + gräsmatta ner mot vattnet
+  box(g,-38,34,0.02,0.07,17.2,20.4,MAT.gravel,false);
+  box(g,-26,26,0.01,0.05,20.4,31,MAT.lawn,false);
+  // tillbyggnaden framför, ljusblå med sadeltak
+  box(g,2.4,8.2,0,3.0,11.6,16.2,MAT.blue);
+  const tri=new THREE.Shape([new THREE.Vector2(-2.6,0),new THREE.Vector2(2.6,0),new THREE.Vector2(0,1.5)]);
+  const rg=new THREE.ExtrudeGeometry(tri,{depth:6.4,bevelEnabled:false}); rg.rotateY(Math.PI/2);
+  const rm=new THREE.Mesh(rg,MAT.roof); rm.position.set(2.1,3.0,13.9); rm.castShadow=true; rm.receiveShadow=true; g.add(rm);
+  box(g,4.6,5.8,0,2.2,16.15,16.25,MAT.door,false);
+  // flaggstänger
+  [[-2.2,18.2],[9.6,18.2]].forEach(([x,z])=>{ box(g,x-0.05,x+0.05,0,8.5,z-0.05,z+0.05,MAT.white); box(g,x+0.05,x+1.3,7.3,8.3,z-0.01,z+0.01,MAT.white,false); });
+  // vit paviljong österut
+  box(g,15.6,19,0,2.1,12.4,15.6,MAT.white);
+  const tent=new THREE.Mesh(new THREE.ConeGeometry(2.6,1.3,4),MAT.white); tent.position.set(17.3,2.75,14); tent.rotation.y=Math.PI/4; tent.castShadow=true; g.add(tent);
+  // bryggan ut i vattnet
+  box(g,-3.6,-2.0,0.28,0.4,30,41,MAT.deck);
+  for(let z=31;z<41;z+=2.5){ box(g,-3.6,-3.45,-0.4,0.3,z,z+0.15,MAT.wood,false); box(g,-2.15,-2.0,-0.4,0.3,z,z+0.15,MAT.wood,false); }
+})();
+
+// Sjön har vuxit igen: vass över norra delen, öppet vatten kvar vid bryggan, en kanal och i södra delen
+const REED = tmat(reedTex,{polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
+const reedPoly = flatShape([[300,1250],[330,1150],[380,1070],[450,1030],[540,1012],[620,1005],[700,985],[770,955],[800,1010],[860,1050],[960,1085],[1060,1078],[1140,1090],[1145,1140],[1060,1170],[960,1195],[800,1225],[620,1255],[480,1270]].map(p=>P(...p)),0.065,REED);
+const WATER2 = mat(0x4a7383,{roughness:.06,metalness:.15,side:THREE.DoubleSide,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2});
+const openPoly = flatShape([[-4,29],[6,24],[18,26],[22,33],[16,41],[4,44],[-6,39]],0.075,WATER2);
+const channel = ribbon([[22,26],[16,34],[8,46],[-2,62],[-10,82],[-16,104],[-22,126],[-26,146]],4.5,0.075,WATER2);
+
+// Lång träbro diagonalt över ån, från gräsmattans östra kant
+(function bridge(){
+  const g=new THREE.Group(); g.position.set(34,0,14.5); g.rotation.y=-0.42; scene.add(g);
+  box(g,-11,11,0.55,0.72,-0.9,0.9,MAT.wood);
+  [-0.85,0.85].forEach(z=>{ box(g,-11,11,1.55,1.62,z-0.04,z+0.04,MAT.wood,false); for(let x=-11;x<=11;x+=1.1) box(g,x-0.03,x+0.03,0.72,1.55,z-0.03,z+0.03,MAT.wood,false); });
+  for(let x=-9;x<=9;x+=4.5){ box(g,x-0.1,x+0.1,-0.5,0.55,-0.85,-0.65,MAT.wood,false); box(g,x-0.1,x+0.1,-0.5,0.55,0.65,0.85,MAT.wood,false); }
+})();
+
+// football pitch
+const pitch=new THREE.Group(); const [fx,fz]=P(911,398); pitch.position.set(fx,0,fz); pitch.rotation.y=0.27; scene.add(pitch);
+box(pitch,-30,30,0,0.08,-52,52,tmat(pitchTex),false);
+const line=mat(0xf4f4ef);
+[[-27.5,27.5,-50,-49.85],[-27.5,27.5,49.85,50],[-27.5,27.5,-0.07,0.07]].forEach(r=>box(pitch,r[0],r[1],0.08,0.1,r[2],r[3],line,false));
+[[-27.5,-27.35],[27.35,27.5]].forEach(r=>box(pitch,r[0],r[1],0.08,0.1,-50,50,line,false));
+
+// small outbuildings
+function shed(x,z,w,d,r){ const g=new THREE.Group(); g.position.set(x,0,z); g.rotation.y=r||0; scene.add(g);
+  box(g,-w/2,w/2,0,2.4,-d/2,d/2,MAT.red); box(g,-w/2-0.3,w/2+0.3,2.4,2.6,-d/2-0.3,d/2+0.3,MAT.roof); }
+shed(-21,2.5,3.5,4.5,0.3); shed(...P(955,870),4,4,0); shed(...P(843,940),3,4,0.2);
+
+// site labels
+addLabel('Skutesjön','',scene,...(()=>{const p=P(560,1300);return [p[0],1,p[1]]})(),'site','site');
+addLabel('Vassen','',scene,...(()=>{const p=P(900,1130);return [p[0],1,p[1]]})(),'site','site');
+addLabel('Bryggan','',scene,8,1.5,40,'site','site');
+addLabel('Bron','',scene,40,2,18,'site','site');
+addLabel('Kilen','',scene,...(()=>{const p=P(930,860);return [p[0],1,p[1]]})(),'site','site');
+addLabel('Fotbollsplan','',scene,fx,1,fz,'site','site');
+addLabel('Ån','',scene,...(()=>{const p=P(770,700);return [p[0]+6,1,p[1]]})(),'site','site');
+addLabel('Huvudbyggnad','2 våningar · ≈ 400 m²',mainOuter,0,9.5,0,'bldg','bldg');
+addLabel('Lägergården','Övernattning · ≈ 170 m²',dormOuter,0,5.5,0,'bldg','bldg');
+
+/* ================= SKOG, VASS & DETALJER ================= */
+(function nature(){
+  const inPoly=(x,z,poly)=>{let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const[xi,zi]=poly[i],[xj,zj]=poly[j];if(((zi>z)!==(zj>z))&&(x<(xj-xi)*(z-zi)/(zj-zi)+xi))c=!c;}return c;};
+  const dLine=(x,z,L)=>{let m=1e9;for(let i=0;i<L.length-1;i+=2){const[a,b]=L[i],[c,d]=L[Math.min(L.length-1,i+2)];const dx=c-a,dz=d-b,l2=dx*dx+dz*dz||1;let t=((x-a)*dx+(z-b)*dz)/l2;t=Math.max(0,Math.min(1,t));m=Math.min(m,Math.hypot(x-a-t*dx,z-b-t*dz));}return m;};
+  let seed=7; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  const lakeLoop=lake.concat([lake[0]]);
+  const ca=Math.cos(-0.27), sa=Math.sin(-0.27);
+  const onPitch=(x,z,pad)=>{const lx=(x-fx)*ca-(z-fz)*sa, lz=(x-fx)*sa+(z-fz)*ca; return Math.abs(lx)<30+pad&&Math.abs(lz)<52+pad;};
+  const free=(x,z,o)=>{ // o: {house, dorm, shore, stream, road, pitch}
+    if(Math.hypot(x,z)<o.house) return false;
+    if(Math.hypot(x-82.5,z+74.6)<o.dorm) return false;
+    if(inPoly(x,z,lake)||dLine(x,z,lakeLoop)<o.shore) return false;
+    if(inPoly(x,z,kilen)) return false;
+    if(onPitch(x,z,o.pitch)) return false;
+    if(dLine(x,z,streamN)<o.stream||dLine(x,z,streamE)<o.stream+2||dLine(x,z,road)<o.road) return false;
+    if(Math.hypot(x-35,z+10)<14) return false;
+    if(Math.hypot(x-34,z-14.5)<13) return false; // bron
+    return true;
+  };
+
+  /* --- geometrihjälp: slå ihop delar med vertexfärg --- */
+  function merge(parts){ const P=[],N=[],C=[]; const c=new THREE.Color();
+    parts.forEach(([g,hex])=>{ g=g.index?g.toNonIndexed():g; g.computeVertexNormals(); c.setHex(hex);
+      const p=g.attributes.position,n=g.attributes.normal; for(let i=0;i<p.count;i++){ P.push(p.getX(i),p.getY(i),p.getZ(i)); N.push(n.getX(i),n.getY(i),n.getZ(i)); C.push(c.r,c.g,c.b); } });
+    const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.Float32BufferAttribute(P,3)); geo.setAttribute('normal',new THREE.Float32BufferAttribute(N,3)); geo.setAttribute('color',new THREE.Float32BufferAttribute(C,3)); return geo; }
+  function blob(sx,sy,sz,ox,oy,oz,amp,detail){ const g=new THREE.IcosahedronGeometry(1,detail==null?0:detail); const p=g.attributes.position;
+    for(let i=0;i<p.count;i++){ const x=p.getX(i),y=p.getY(i),z=p.getZ(i); const d=1+(amp||.2)*Math.sin(x*7.3+y*3.1+ox*9)*Math.cos(z*5.7-y*2.3+oz*7);
+      p.setXYZ(i,x*d*sx+ox,y*d*sy+oy,z*d*sz+oz); } return g; }
+  function cone(r,h,y0,seg,rot){ const g=new THREE.ConeGeometry(r,h,seg||9); g.rotateY(rot||0); g.translate(0,y0+h/2,0); return g; }
+  function cyl(r0,r1,h,y0,x,z){ const g=new THREE.CylinderGeometry(r0,r1,h,6); g.translate(x||0,y0+h/2,z||0); return g; }
+
+  // Gran – sex lager med lätt vridning (radie 1, höjd 1; skalas per instans)
+  const spruceGeo=merge([[cyl(.07,.11,.3,0),0x4a3a2c]].concat(
+    [[1,.42,.07],[.8,.38,.25],[.6,.34,.43],[.4,.28,.6],[.2,.26,.76]].map(([r,h,y],i)=>[cone(r,h,y,7,i*.9),i%2?0x2f4c37:0x36553d])));
+  // Tall – rak röd stam, platt krona högt upp (enhetsskala)
+  const pineGeo=merge([[cyl(.012,.02,.8,0),0x6a4331],[cyl(.006,.008,.12,.62,.05,0).rotateZ(-.5),0x6a4331],
+    [blob(.13,.06,.13,0,.8,0,.25),0x3d5939],[blob(.1,.05,.1,.08,.88,.03,.25),0x46633f],[blob(.08,.045,.08,-.07,.93,-.04,.25),0x3d5939],[blob(.07,.04,.07,.11,.74,-.05,.25),0x46633f]]);
+  // Björk – vit stam, luftig ljus krona (gul ton i oktober på en del)
+  const birchGeo=merge([[cyl(.012,.02,.62,0),0xe7e3da],[cyl(.006,.01,.18,.45,.04,.02).rotateZ(-.35),0xe7e3da],
+    [blob(.16,.2,.16,0,.66,0,.22),0x6f8a4a],[blob(.12,.15,.12,.08,.56,.05,.22),0x7a944f],[blob(.11,.14,.11,-.08,.76,-.04,.22),0x667f45]]);
+  const leafMat=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.92,metalness:0,flatShading:true});
+
+  const N=LITE?3600:6400;
+  const sp=new THREE.InstancedMesh(spruceGeo,leafMat,N), pi=new THREE.InstancedMesh(pineGeo,leafMat,N), bi=new THREE.InstancedMesh(birchGeo,leafMat,N);
+  [sp,pi,bi].forEach(m=>{m.castShadow=true; m.receiveShadow=true;});
+  const m4=new THREE.Matrix4(), q=new THREE.Quaternion(), e=new THREE.Euler(), s=new V3(), p=new V3(), col=new THREE.Color();
+  let a=0,b=0,c=0; const TO={house:30,dorm:20,shore:5,stream:6,road:9,pitch:8};
+  for(let k=0;k<N*6 && a+b+c<N;k++){
+    const x=-280+rnd()*860, z=-390+rnd()*640; if(!free(x,z,TO)) continue;
+    const nearOpen = dLine(x,z,lakeLoop)<30 || Math.hypot(x,z)<55 || onPitch(x,z,22);
+    const r=rnd(); e.set((rnd()-.5)*.06,rnd()*6.28,(rnd()-.5)*.06); q.setFromEuler(e); p.set(x,-.1,z);
+    const v=.84+rnd()*.24;
+    if(r < (nearOpen?.3:.6)){ const h=11+rnd()*10, rr=h*(.15+rnd()*.05); s.set(rr,h,rr); m4.compose(p,q,s); sp.setMatrixAt(a,m4); sp.setColorAt(a,col.setRGB(v*.96,v,v*.94)); a++; }
+    else if(r < (nearOpen?.45:.82)){ const h=15+rnd()*9; s.set(h,h,h); m4.compose(p,q,s); pi.setMatrixAt(b,m4); pi.setColorAt(b,col.setRGB(v,v,v*.95)); b++; }
+    else { const h=9+rnd()*8; s.set(h,h,h); m4.compose(p,q,s); bi.setMatrixAt(c,m4);
+      const autumn=rnd()<.45; bi.setColorAt(c, autumn? col.setRGB(1.3*v,1.02*v,.5*v) : col.setRGB(v,v,v*.95)); c++; }
+  }
+  sp.count=a; pi.count=b; bi.count=c; scene.add(sp,pi,bi);
+
+  // Buskar, blåbärsris och stenblock på skogsbotten
+  const bushGeo=merge([[blob(1,.7,1,0,.35,0,.28,1),0x4b6a3c],[blob(.7,.5,.7,.6,.25,.3,.28),0x58763f]]);
+  const rockG=new THREE.DodecahedronGeometry(1,0); { const pp=rockG.attributes.position; for(let i=0;i<pp.count;i++){ const x=pp.getX(i),y=pp.getY(i),z=pp.getZ(i); const d=1+.18*Math.sin(x*4.1+z*3.3); pp.setXYZ(i,x*d,y*d*.62,z*d);} }
+  const rockGeo=merge([[rockG,0x8c8b85]]);
+  const NB=LITE?1400:2800, NR=LITE?350:700;
+  const bush=new THREE.InstancedMesh(bushGeo,leafMat,NB), rock=new THREE.InstancedMesh(rockGeo,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.95,flatShading:true}),NR);
+  bush.receiveShadow=rock.receiveShadow=true; rock.castShadow=true;
+  const UO={house:18,dorm:14,shore:2,stream:3,road:5,pitch:4};
+  let nb=0,nr=0;
+  for(let k=0;k<(NB+NR)*5 && (nb<NB||nr<NR);k++){
+    const x=-260+rnd()*820, z=-370+rnd()*610; if(!free(x,z,UO)) continue;
+    e.set(0,rnd()*6.28,0); q.setFromEuler(e); const v=.82+rnd()*.25;
+    if(rnd()<.78){ if(nb>=NB) continue; const sc=.5+rnd()*1.1; p.set(x,-.15,z); s.set(sc,sc*(.7+rnd()*.5),sc); m4.compose(p,q,s); bush.setMatrixAt(nb,m4); bush.setColorAt(nb,col.setRGB(v*(rnd()<.2?1.25:1),v,v*.9)); nb++; }
+    else { if(nr>=NR) continue; const sc=.35+Math.pow(rnd(),2)*1.8; e.set((rnd()-.5)*.4,rnd()*6.28,(rnd()-.5)*.4); q.setFromEuler(e); p.set(x,-sc*.15,z); s.set(sc*(.8+rnd()*.5),sc,sc*(.8+rnd()*.5)); m4.compose(p,q,s); rock.setMatrixAt(nr,m4);
+      const moss=rnd()<.35; rock.setColorAt(nr, moss? col.setRGB(.72*v,.85*v,.62*v) : col.setRGB(v,v,v*.97)); nr++; }
+  }
+  bush.count=nb; rock.count=nr; scene.add(bush,rock);
+
+  // Strandkant runt sjön
+  ribbon(lakeLoop,4,0.045,mat(0x7f775c,{polygonOffset:true,polygonOffsetFactor:1,polygonOffsetUnits:1}));
+
+  // Vass: tuvor av strån i den igenvuxna delen, tätast mot det öppna vattnet (oktoberfärger)
+  const blade=new THREE.ConeGeometry(.05,1,3); blade.translate(0,.5,0);
+  const NV=LITE?9000:18000; const reed=new THREE.InstancedMesh(blade,new THREE.MeshStandardMaterial({color:0xffffff,roughness:.85}),NV);
+  reed.receiveShadow=true;
+  let nv=0; const rc=[[.42,.48,.25],[.55,.5,.31],[.38,.45,.23],[.62,.54,.35]];
+  const mainPt=(lx,lz)=>{const v=mainIn.localToWorld(new V3(lx,0,lz)); return [v.x,v.z];};
+  const jetty=mainPt(-2.8,35.5);
+  for(let k=0;k<NV*3 && nv<NV;k++){
+    const x=-160+rnd()*380, z=30+rnd()*130;
+    if(!inPoly(x,z,reedPoly) || inPoly(x,z,openPoly) || dLine(x,z,channel)<2.6 || Math.hypot(x-jetty[0],z-jetty[1])<8) continue;
+    const edge = Math.min(dLine(x,z,openPoly.concat([openPoly[0]])), dLine(x,z,channel));
+    if(edge>14 && rnd()<.45) continue;
+    const ci=rc[(rnd()*rc.length)|0], cnt=6+((rnd()*6)|0);
+    for(let j=0;j<cnt && nv<NV;j++){
+      const h=1.2+rnd()*1.4; e.set((rnd()-.5)*.45,rnd()*6.28,(rnd()-.5)*.45); q.setFromEuler(e);
+      p.set(x+(rnd()-.5)*.9,.05,z+(rnd()-.5)*.9); s.set(1.6,h,1.6); m4.compose(p,q,s); reed.setMatrixAt(nv,m4);
+      const v=.85+rnd()*.3; reed.setColorAt(nv,col.setRGB(ci[0]*v,ci[1]*v,ci[2]*v)); nv++; }
+  }
+  reed.count=nv; scene.add(reed);
+
+  // Näckrosblad i det öppna vattnet vid bryggan
+  const padG=new THREE.CircleGeometry(1,12,.25,5.9); padG.rotateX(-Math.PI/2);
+  const pads=new THREE.InstancedMesh(padG,mat(0x5d7a3d,{side:THREE.DoubleSide,roughness:.5}),90); let np=0;
+  for(let k=0;k<900 && np<90;k++){ const x=-6+rnd()*30, z=22+rnd()*24; if(!inPoly(x,z,openPoly) || Math.hypot(x-jetty[0],z-jetty[1])<4) continue;
+    const sc=.22+rnd()*.3; e.set(0,rnd()*6.28,0); q.setFromEuler(e); p.set(x,.13,z); s.set(sc,1,sc); m4.compose(p,q,s); pads.setMatrixAt(np++,m4); }
+  pads.count=np; scene.add(pads);
+
+  // Gräs- och ängstuvor i Kilen och på gräsytorna
+  const NT=LITE?5000:11000; const tuft=new THREE.InstancedMesh(blade,new THREE.MeshStandardMaterial({color:0xffffff,roughness:.9}),NT); tuft.receiveShadow=true;
+  const tc=[[.4,.48,.24],[.48,.52,.28],[.56,.54,.32],[.36,.44,.22]]; let nt=0;
+  for(let k=0;k<NT*4 && nt<NT;k++){ const x=40+rnd()*200, z=-150+rnd()*230; if(!inPoly(x,z,kilen) || Math.hypot(x-82.5,z+74.6)<13) continue;
+    const ci=tc[(rnd()*tc.length)|0];
+    for(let j=0;j<3 && nt<NT;j++){ const h=.35+rnd()*.55; e.set((rnd()-.5)*.7,rnd()*6.28,(rnd()-.5)*.7); q.setFromEuler(e); p.set(x+(rnd()-.5)*.5,0,z+(rnd()-.5)*.5); s.set(2.2,h,2.2); m4.compose(p,q,s); tuft.setMatrixAt(nt,m4);
+      const v=.85+rnd()*.3; tuft.setColorAt(nt,col.setRGB(ci[0]*v,ci[1]*v,ci[2]*v)); nt++; } }
+  tuft.count=nt; scene.add(tuft);
+})();
+
+/* --- byggnadsdetaljer --- */
+(function details(){
+  // Huvudbyggnaden: mörk vindskiva, hängrännor, stuprör, skorstenshuvar
+  box(gRoof,-0.43,11.73,5.86,6.18,-0.43,10.93,MAT.dframe,false); box(gRoof,-0.38,11.68,6.15,6.17,-0.38,10.88,MAT.roof,false);
+  box(gRoof,-12.43,0,5.86,6.15,1.17,8.63,MAT.dframe,false); box(gRoof,-12.38,0,6.12,6.14,1.22,8.58,MAT.roof,false);
+  box(gRoof,-0.4,11.7,5.8,5.92,10.93,11.05,MAT.metal,false); box(gRoof,-0.4,11.7,5.8,5.92,-0.55,-0.43,MAT.metal,false);
+  box(gRoof,-12.4,0,5.8,5.92,8.63,8.75,MAT.metal,false);
+  [[11.55,10.98],[11.55,-0.5],[-12.3,8.7]].forEach(([x,z])=>box(gB,x-0.05,x+0.05,-0.3,5.85,z-0.05,z+0.05,MAT.metal,false));
+  [[-8.3,-7.7,4.4,5.0],[4.5,5.0,3.9,4.4]].forEach(([x0,x1,z0,z1])=>{ box(gRoof,x0-0.08,x1+0.08,7.1,7.2,z0-0.08,z1+0.08,MAT.metal); box(gRoof,x0+.12,x1-.12,7.2,7.32,z0+.12,z1-.12,MAT.dframe,false); });
+  // ventilationshuvar och stege på taket
+  box(gRoof,8.6,9.0,6.15,6.7,2.0,2.4,MAT.metal); box(gRoof,2.0,2.3,6.15,6.55,6.0,6.3,MAT.metal);
+  // Lägergården: vita knutar och vit sockellist
+  [[-0.13,0.05,-0.13,0.05],[20.45,20.63,-0.13,0.05],[-0.13,0.05,8.25,8.43],[20.45,20.63,8.25,8.43]].forEach(([x0,x1,z0,z1])=>box(dormIn,x0,x1,0.4,3.0,z0,z1,MAT.trim));
+  box(dormIn,-0.12,20.62,0.38,0.5,-0.12,-0.08,MAT.trim,false); box(dormIn,-0.12,20.62,0.38,0.5,8.38,8.42,MAT.trim,false);
+  box(dormIn,-0.12,-0.08,0.38,0.5,-0.12,8.42,MAT.trim,false); box(dormIn,20.58,20.62,0.38,0.5,-0.12,8.42,MAT.trim,false);
+  // räcke på lägergårdens altan
+  for(let z=-0.75;z<9.1;z+=0.45) box(dormIn,-3.98,-3.94,0.4,1.4,z-0.02,z+0.02,MAT.wood,false);
+  box(dormIn,-4,0,1.36,1.44,-0.87,-0.81,MAT.wood,false); box(dormIn,-4,0,1.36,1.44,9.11,9.17,MAT.wood,false);
+  // Flaggstänger: knopp
+  [[-2.2,18.2],[9.6,18.2]].forEach(([x,z])=>{ const k=new THREE.Mesh(new THREE.SphereGeometry(.1,12,8),mat(0xd9c27a,{metalness:.6,roughness:.35})); k.position.set(x,8.6,z); mainIn.add(k); });
+  // Bänkar på gräsmattan mot vattnet
+  [[-9,24.5],[13,24.5]].forEach(([x,z])=>{ const g=new THREE.Group(); g.position.set(x,0,z); mainIn.add(g);
+    box(g,-0.9,0.9,0.42,0.47,-0.22,0.22,MAT.wood); box(g,-0.9,0.9,0.55,0.9,-0.25,-0.21,MAT.wood);
+    [-0.8,0.8].forEach(lx=>{ box(g,lx-.04,lx+.04,0,0.42,-0.2,0.2,MAT.metal,false); box(g,lx-.04,lx+.04,0.42,0.9,-0.25,-0.19,MAT.metal,false); }); });
+  // Roddbåten vid bryggan
+  (function boat(){
+    const sh=new THREE.Shape([[-.62,.42],[-.52,.1],[-.28,0],[.28,0],[.52,.1],[.62,.42],[.56,.42],[.46,.15],[.26,.06],[-.26,.06],[-.46,.15],[-.56,.42]].map(([x,y])=>new THREE.Vector2(x,y)));
+    const g=new THREE.ExtrudeGeometry(sh,{depth:3.6,steps:16,bevelEnabled:false}); g.translate(0,0,-1.8);
+    const pp=g.attributes.position; for(let i=0;i<pp.count;i++){ const z=pp.getZ(i), t=Math.abs(z)/1.8; if(t>.4){ const u=(t-.4)/.6, k=1-u*u*.94; pp.setX(i,pp.getX(i)*k); pp.setY(i,pp.getY(i)+u*u*.14);} }
+    g.computeVertexNormals();
+    const B=new THREE.Group(); B.position.set(-5.0,.04,36.2); B.rotation.y=.08; mainIn.add(B);
+    const hull=new THREE.Mesh(g,mat(0xe9e5dc,{side:THREE.DoubleSide,roughness:.6})); hull.castShadow=true; B.add(hull);
+    const inner=new THREE.Mesh(g,mat(0x8a6c4f,{side:THREE.BackSide,roughness:.9})); inner.scale.set(.97,1,.99); B.add(inner);
+    box(B,-.5,.5,.33,.37,-.25,.05,MAT.wood,false); box(B,-.46,.46,.33,.37,.9,1.15,MAT.wood,false);
+    [[-.5,1],[.5,-1]].forEach(([x,d])=>{ const o=new THREE.Mesh(new THREE.BoxGeometry(.05,.04,2.4),MAT.wood); o.position.set(x*.9,.45,-.3); o.rotation.y=d*.12; B.add(o); });
+    box(mainIn,-3.62,-3.58,0.4,1.0,36.1,36.18,MAT.metal,false); // knap på bryggan
+  })();
+  // Fotbollsmål
+  [-50,50].forEach(zz=>{ const s=Math.sign(zz); const W=MAT.frame;
+    [-3.66,3.66].forEach(x=>{ box(pitch,x-.06,x+.06,.08,2.52,zz-.06,zz+.06,W); box(pitch,x-.03,x+.03,.08,.14,zz,zz+s*1.6,W,false); box(pitch,x-.03,x+.03,.08,2.52,zz+s*1.6-.03,zz+s*1.6+.03,W,false); });
+    box(pitch,-3.72,3.72,2.46,2.58,zz-.06,zz+.06,W); });
+})();
+
+// omgivningsreflex: dämpad på matta ytor, full på vatten, glas och solpaneler
+scene.traverse(o=>{ if(!o.material) return; const m=o.material; const shiny=m.roughness!=null&&m.roughness<.4; m.envMapIntensity=shiny?1:.45; });
+/* ================= UI / state ================= */
+let mode='ext', labelsOn=true, tween=null;
+const tagActive=t=> t==='site'||t==='bldg' ? true : t==='dorm' ? mode!=='ext' : t===mode;
+function setMode(m){
+  mode=m; gRoof.visible=(m==='ext'); gB.visible=(m!=='M'); dRoof.visible=(m==='ext');
+  document.querySelectorAll('#floors button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===m));
+  renderRooms();
+}
+const VIEWS={
+  site:{pos:new V3(170,300,290),tgt:new V3(60,0,-50)},
+  main:{pos:new V3(-26,24,36),tgt:new V3(0,2.4,0)},
+  dorm:{pos:new V3(110,24,-48),tgt:new V3(82.5,1,-74.6)},
+  lake:{pos:new V3(-14,9,54),tgt:new V3(10,0.5,28)}
+};
+let view='main';
+function setView(v){ view=v; const V=VIEWS[v]; fly(V.pos.clone(),V.tgt.clone());
+  document.querySelectorAll('#views button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===v)); }
+function fly(pos,tgt){ tween={p0:camera.position.clone(),t0:controls.target.clone(),p1:pos,t1:tgt,start:performance.now(),dur:reduceMotion?1:1100}; }
+function focusRoom(parent,r,y){
+  const c=parent.localToWorld(new V3((r.x0+r.x1)/2,y,(r.z0+r.z1)/2));
+  const big=Math.max(r.x1-r.x0,r.z1-r.z0);
+  const d=Math.max(9,big*1.3);
+  fly(c.clone().add(new V3(-d*0.55,d*1.05,d*0.8)),c);
+}
+function listHTML(title,list,key){
+  return '<div class="rlist"><h2>'+title+'</h2><ul>'+list.map((r,i)=>'<li><button data-k="'+key+'" data-i="'+i+'"><span>'+r.n+'</span><span class="m2">'+fmtArea(area(r))+' m²</span></button></li>').join('')+'</ul></div>';
+}
+function renderRooms(){
+  const el=$('#rooms');
+  if(mode==='ext'){
+    el.innerHTML='<dl class="facts">'+
+      '<dt>Huvudbyggnad, per våning</dt><dd>≈ 198 m²</dd>'+
+      '<dt>Tvåvåningsdelen</dt><dd>11,3 × 10,5 m</dd>'+
+      '<dt>Flygeln mot väster</dt><dd>12,0 × 6,6 m</dd>'+
+      '<dt>Solaltan</dt><dd>14,8 × 2,3 m</dd>'+
+      '<dt>Takhöjd motionsrum</dt><dd>min 2,50 m</dd>'+
+      '<dt>Lägergården</dt><dd>20,5 × 8,3 m</dd>'+
+      '<dt>Altan lägergården</dt><dd>4 × 10 m</dd></dl>'+
+      '<p class="note">Välj en våning för att lyfta av taket och se rummen.</p>';
+    return;
+  }
+  el.innerHTML = mode==='B'
+    ? listHTML('Bottenvåning',ROOMS_B,'B')+listHTML('Lägergården',ROOMS_D,'D')
+    : listHTML('Markvåning',ROOMS_M,'M')+listHTML('Lägergården',ROOMS_D,'D');
+}
+$('#rooms').addEventListener('click',e=>{
+  const b=e.target.closest('button[data-k]'); if(!b) return;
+  const k=b.dataset.k, i=+b.dataset.i;
+  if(k==='B') focusRoom(mainIn,ROOMS_B[i],3.0);
+  else if(k==='M') focusRoom(mainIn,ROOMS_M[i],0);
+  else focusRoom(dormIn,ROOMS_D[i],0.4);
+});
+$('#views').addEventListener('click',e=>{const b=e.target.closest('button');if(b) setView(b.dataset.view);});
+$('#floors').addEventListener('click',e=>{const b=e.target.closest('button');if(!b) return; setMode(b.dataset.mode); if(b.dataset.mode!=='ext'&&view==='site') setView('main');});
+$('#lblToggle').addEventListener('change',e=>{labelsOn=e.target.checked;});
+function setPanel(open){ const p=$('#panel'), b=$('#ptoggle'); p.classList.toggle('collapsed',!open);
+  b.querySelector('span').textContent=open?'Dölj':'Visa'; b.setAttribute('aria-expanded',open); b.setAttribute('aria-label',open?'Dölj panelen':'Visa panelen'); }
+$('#ptoggle').addEventListener('click',()=>setPanel($('#panel').classList.contains('collapsed')));
+$('#ptitle').addEventListener('click',()=>{ if($('#panel').classList.contains('collapsed')) setPanel(true); });
+const inFrame = window.self!==window.top;
+if(inFrame){document.querySelector('.hint').style.display='none';}
+setPanel(!(inFrame || innerWidth<=640));
+addEventListener('storage',e=>{ if(e.key==='skute-theme'){ document.documentElement.setAttribute('data-theme',e.newValue==='dark'?'dark':'light'); } });
+
+/* ---------- loop ---------- */
+function resize(){ const w=stage.clientWidth,h=stage.clientHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
+new ResizeObserver(resize).observe(stage); resize();
+camera.position.copy(VIEWS.main.pos); controls.target.copy(VIEWS.main.tgt);
+setMode('ext');
+
+const tmp=new V3();
+function updateLabels(){
+  const w=stage.clientWidth,h=stage.clientHeight;
+  for(const L of labels){
+    let show=labelsOn&&tagActive(L.tag);
+    if(show){
+      tmp.copy(L.p); L.parent.localToWorld(tmp);
+      const d=camera.position.distanceTo(tmp);
+      if(L.kind.startsWith('room') && d>(L.kind==='room small'?38:75)) show=false;
+      if(L.kind==='bldg' && d>520) show=false;
+      if(show){ tmp.project(camera); if(tmp.z>1||Math.abs(tmp.x)>1.1||Math.abs(tmp.y)>1.1) show=false;
+        else L.el.style.transform='translate('+((tmp.x*0.5+0.5)*w).toFixed(1)+'px,'+((-tmp.y*0.5+0.5)*h).toFixed(1)+'px) translate(-50%,-50%)'; }
+    }
+    if(show!==L.shown){ L.el.hidden=!show; L.shown=show; }
+  }
+}
+const ease=k=>k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
+function loop(now){
+  if(tween){ let k=Math.min(1,(now-tween.start)/tween.dur); const e=ease(k);
+    camera.position.lerpVectors(tween.p0,tween.p1,e); controls.target.lerpVectors(tween.t0,tween.t1,e); if(k>=1) tween=null; }
+  controls.update(); aimSun(controls.target);
+  renderer.render(scene,camera); updateLabels();
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+})();
+</script>
+
+</body></html>
