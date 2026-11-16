@@ -31,3 +31,5 @@ Sajten kan serveras som den är via t.ex. GitHub Pages (Settings → Pages → D
 Sajten ligger på **GitHub Pages** (Settings → Pages → Deploy from branch → `main`, rotkatalogen). Ingen byggprocess behövs.
 
 Kalendern (med Facebook-koppling via en Netlify-funktion) togs bort 2026-11-16. Den finns kvar i git-historiken (commit `4f1e644`) om den ska tillbaka.
+
+ 
