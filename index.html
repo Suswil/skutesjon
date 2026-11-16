@@ -828,7 +828,7 @@ video{max-width:100%}
     <div class="mc-panel" id="mcPanel" aria-live="polite" hidden></div>
     <h3 class="cal-sub">Kommande event</h3>
     <ul class="cal" id="calendar"></ul>
-    <p class="cal-foot"><span id="cal-note">Datumen nedan är exempel tills det riktiga programmet är satt. Vill du hyra en period som inte syns här?</span> <a href="#boka">Skicka en förfrågan.</a></p>
+    <p class="cal-foot"><span id="cal-note">Vill du hyra en period?</span> <a href="#boka">Skicka en förfrågan.</a></p>
   </div>
 </section>
 
@@ -964,7 +964,8 @@ video{max-width:100%}
 
   // Kalender – event hämtas automatiskt från Facebooksidan (/api/events),
   // privata uthyrningar från bookings.json. Alla andra dagar = ledigt att hyra.
-  // Utan koppling (t.ex. i Claude-förhandsvisningen) visas exempeldata.
+  // Utan Facebook-koppling (t.ex. GitHub Pages) hämtas event från events.json i stället.
+  // Exempeldata visas bara när sidan öppnas som lokal fil.
   var EXAMPLES = [
     {start:'2026-10-10', end:'2026-10-11', title:'Öppen bastuhelg med aufguss', desc:'Bastu, aufguss, bad och eld vid sjön. Drop-in för dig som vill prova platsen.'},
     {start:'2026-10-24', title:'Kakaoceremoni', desc:'Kväll med kakao, sång och delning vid elden i gemenskapshuset.'},
@@ -986,7 +987,8 @@ video{max-width:100%}
         bookedTxt:'Det här datumet är redan uthyrt. Välj gärna ett annat.',
         noEvents:'Inga planerade event just nu – anmäl dig till nyhetsbrevet så hör vi av oss.',
         noteLive:'Eventen uppdateras automatiskt från vår Facebooksida. Vill du hyra en period?',
-        noteEx:'Datumen är exempel tills det riktiga programmet är satt. Vill du hyra en period?'},
+        noteEx:'Datumen är exempel tills det riktiga programmet är satt. Vill du hyra en period?',
+        noteManual:'Vill du hyra en period?'},
     en:{months:['January','February','March','April','May','June','July','August','September','October','November','December'],
         short:['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'],
         wd:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
@@ -995,7 +997,8 @@ video{max-width:100%}
         bookedTxt:'This date is already booked. Please choose another.',
         noEvents:'No events planned right now – sign up for the newsletter and we’ll let you know.',
         noteLive:'Events are updated automatically from our Facebook page. Want to rent a period?',
-        noteEx:'The dates are examples until the real programme is set. Want to rent a period?'}
+        noteEx:'The dates are examples until the real programme is set. Want to rent a period?',
+        noteManual:'Want to rent a period?'}
   };
   var TAG_EN = {'Öppet':'Open','Ceremoni':'Ceremony','Retreat':'Retreat','Festival':'Festival','Bastu':'Sauna','Kurs':'Course','Yoga':'Yoga','Event':'Event'};
 
@@ -1005,7 +1008,8 @@ video{max-width:100%}
   var panel = document.getElementById('mcPanel');
   var prevBtn = document.getElementById('mcPrev'), nextBtn = document.getElementById('mcNext');
 
-  var events = null, bookings = EXAMPLE_BOOKINGS, isLive = false;
+  var online = /^https?:$/.test(location.protocol);
+  var events = null, bookings = online ? [] : EXAMPLE_BOOKINGS, isLive = false, mode = online ? 'manual' : 'example';
   var today = new Date(); today.setHours(0,0,0,0);
   var view = new Date(today.getFullYear(), today.getMonth(), 1);
   var selA = null, selB = null, shownEvent = null;
@@ -1163,24 +1167,26 @@ video{max-width:100%}
       }
       ul.appendChild(li);
     });
-    if(note) note.textContent = isLive ? l.noteLive : l.noteEx;
+    if(note) note.textContent = isLive ? l.noteLive : (mode === 'manual' ? l.noteManual : l.noteEx);
   }
 
   function renderAll(){ buildMap(); renderMonths(); renderList(); renderPanel(); }
-  events = EXAMPLES;
+  events = online ? [] : EXAMPLES;
   renderAll();
   new MutationObserver(function(){ renderMonths(); renderList(); renderPanel(); })
     .observe(document.documentElement, {attributes:true, attributeFilter:['lang']});
 
-  if(window.fetch && /^https?:$/.test(location.protocol)){
-    var getJSON = function(u){ return fetch(u, {headers:{accept:'application/json'}}).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }); };
-    Promise.all([getJSON('/api/events'), getJSON('bookings.json')]).then(function(res){
-      var fb = res[0], bk = res[1];
+  if(window.fetch && online){
+    var getJSON = function(u){ return fetch(u, {headers:{accept:'application/json'}, cache:'no-cache'}).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }); };
+    Promise.all([getJSON('/api/events'), getJSON('bookings.json'), getJSON('events.json')]).then(function(res){
+      var fb = res[0], bk = res[1], manual = res[2];
+      bookings = (bk && Array.isArray(bk.bookings)) ? bk.bookings : [];
       if(fb && Array.isArray(fb.events) && fb.source === 'facebook'){
         isLive = true; events = fb.events;
-        bookings = (bk && Array.isArray(bk.bookings)) ? bk.bookings : [];
-        renderAll();
+      } else {
+        events = (manual && Array.isArray(manual.events)) ? manual.events : [];
       }
+      renderAll();
     });
   }
 

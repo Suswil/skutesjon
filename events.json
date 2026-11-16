@@ -1,0 +1,4 @@
+{
+  "_info": "Event som visas i kalendern så länge Facebook-kopplingen inte är på. Datum i formatet ÅÅÅÅ-MM-DD. 'end' (sista dagen), 'desc' och 'url' (t.ex. länk till Facebook-eventet) är valfria.",
+  "events": []
+}

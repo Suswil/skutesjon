@@ -26,7 +26,18 @@ och gå till <http://localhost:8000>.
 
 Sajten kan serveras som den är via t.ex. GitHub Pages (Settings → Pages → Deploy from branch → `main`, rotkatalogen).
 
-## Netlify (rekommenderad hosting)
+## Kalendern
+
+- **Event:** så länge Facebook-kopplingen inte är på läggs event för hand i `events.json`:
+  `{ "start": "2027-06-25", "end": "2027-06-27", "title": "Yggdrasil 2027", "desc": "Kort text", "url": "länk till Facebook-eventet" }` (`end`, `desc` och `url` är valfria).
+- **Privata uthyrningar** (visas som "Uthyrt" utan namn) läggs i `bookings.json`.
+- Alla andra dagar visas som "Ledigt att hyra".
+
+## Hosting
+
+Sajten ligger på **GitHub Pages** (Settings → Pages → Deploy from branch → `main`, rotkatalogen). Facebook-kopplingen är inte på där, eftersom GitHub Pages inte kan köra serverfunktioner.
+
+## Facebook-koppling (senare, kräver Netlify eller Cloudflare Pages)
 
 Sajten är förberedd för Netlify (`netlify.toml`). Koppla repot via **Add new site → Import from Git**, välj grenen `main`. Inga byggsteg behövs.
 
