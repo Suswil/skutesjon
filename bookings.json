@@ -1,0 +1,6 @@
+{
+  "_info": "Privata uthyrningar som inte ska synas som Facebook-event. Datum i formatet ÅÅÅÅ-MM-DD. 'to' är sista dagen.",
+  "bookings": [
+    { "from": "2026-11-20", "to": "2026-11-22" }
+  ]
+}
